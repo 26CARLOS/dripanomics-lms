@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth-routes/index');
 const mediaRoutes = require('./routes/instructor-routes/media-routes');
 const InstuctorCourseRoutes = require('./routes/instructor-routes/course-routes');
+const StudentCourseRoutes = require('./routes/student-routes/course-routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -46,6 +47,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use('/auth', authRoutes);
 app.use('/media', mediaRoutes);
 app.use('/admin/course', InstuctorCourseRoutes);
+app.use('/student/course', StudentCourseRoutes);
 
 
 // Error handling middleware
