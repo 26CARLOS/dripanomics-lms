@@ -90,8 +90,8 @@ export async function mediaBulkUploadService(formData, onProgressCallback) {
     return data;
 }
 
-export async function fetchAllStudentCoursesService(){
-    const { data } = await axiosInstance.get(`/student/course/get`);
+export async function fetchAllStudentCoursesService(query){
+    const { data } = await axiosInstance.get(`/student/course/get?${query}`);
 
     return data;
 }

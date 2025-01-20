@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/button";
-import banner from "../../../../public/banner.jpeg"
+import banner from "/banner.jpeg"
 import { courseCategories } from "@/config";
 import { StudentContext } from "@/context/student-context";
 import { useContext, useEffect } from "react";
 import { fetchAllStudentCoursesService } from "@/services";
 function StudentHomePage() {
-
 
     const {coursesList, setCoursesList} = useContext(StudentContext);
 
@@ -19,10 +18,10 @@ function StudentHomePage() {
 
     useEffect(() => {
         fetchAllStudentCourses();
-    })
+    },[])
 
     return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-full ">
         <section className="flex flex-col lg:flex-row items-center justify-between py-8 px-4 lg:px-8">
             <div className="lg:w-1/2 lg:pr-12 ">
             <h1 className="text-5xl font-bold mb-4">Enriching the lives of others through education.</h1>
