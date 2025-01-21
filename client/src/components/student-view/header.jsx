@@ -1,4 +1,4 @@
-import { GraduationCap, TvMinimalPlay } from "lucide-react";
+import { GraduationCap, TvMinimalPlay, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useContext } from "react";
@@ -35,14 +35,19 @@ function StudentViewCommonHeader() {
                     </Button>
                 </div>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
                 <div className="flex gap-2 items-center">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
                         <span className="font-medium md:text-xl text-[12px] hidden md:block">My Courses</span>
                         <TvMinimalPlay className="h-7 w-7 mx-4" />
                     </div>
                     <Button onClick={handleLogOut} className="text-[14px] md:text-[16px] font-small">
+                        <p className="hidden md:block">
                         Sign Out
+                        </p>
+                        <span className="md:hidden font-bold">
+                            <LogOut className="h-8 w-8"/>
+                        </span>
                     </Button>
                 </div>
             </div>
