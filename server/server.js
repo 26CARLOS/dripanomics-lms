@@ -4,7 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth-routes/index');
 const mediaRoutes = require('./routes/instructor-routes/media-routes');
-const InstuctorCourseRoutes = require('./routes/instructor-routes/course-routes');
+const InstructorCourseRoutes = require('./routes/instructor-routes/course-routes');
 const StudentCourseRoutes = require('./routes/student-routes/course-routes');
 
 const app = express();
@@ -36,9 +36,20 @@ mongoose.connect(MONGO_URI, mongooseOptions)
 // CORS configuration
 app.use(cors({
     origin: process.env.CLIENT_URL,
-    methods: ['GET', 'POST', "DELETE", "PUT"],
+    methods: ['GET', 'POST', "DELETE", "PUT", 'OPTIONS'],
     allowedHeaders: ['Content-Type', "Authorization"],
+    credentials: true,
+    exposedHeaders: ['Access-Control-Allow-Origin']
 }));
+
+console.log(process.env.CLIENT_URL)
+
+//pre-flight requests
+app.options('*', cors({
+    origin: process.env.CLIENT_URL,
+    optionsSuccessStatus: 200
+}));
+
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -46,16 +57,18 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Routes
 app.use('/auth', authRoutes);
 app.use('/media', mediaRoutes);
-app.use('/admin/course', InstuctorCourseRoutes);
+app.use('/admin/course', InstructorCourseRoutes);
 app.use('/student/course', StudentCourseRoutes);
 
 
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).json({
-        success: false,
-        message: err.message || 'Internal Server Error',
+    res.status(err.status || 500).json({
+        error: {
+            message: err.message || 'Internal Server Error',
+            status: err.status || 500
+        }
     });
 });
 

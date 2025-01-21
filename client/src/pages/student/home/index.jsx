@@ -4,9 +4,69 @@ import { courseCategories } from "@/config";
 import { StudentContext } from "@/context/student-context";
 import { useContext, useEffect } from "react";
 import { fetchAllStudentCoursesService } from "@/services";
+import { useNavigate } from "react-router-dom";
+import Flip from "@/components/animated/flip";
+import { useSpring, animated } from '@react-spring/web';
+import { useRef, useState } from 'react';
+
+function CategoryTrack({ categories, reverse }) {
+    const containerRef = useRef(null);
+  
+    const [springs, api] = useSpring(() => ({
+      from: { x: 0 },
+      to: async (next) => {
+        while (true) {
+          await next({ 
+            x: reverse ? 100 : -100,
+            reset: true,
+            from: { x: 0 },
+            config: { 
+              duration: 20000,
+              easing: t => t 
+            }
+          });
+        }
+      },
+      config: { 
+        duration: 20000,
+        easing: t => t
+      },
+    }));
+  
+    return (
+      <div className="relative overflow-hidden">
+        <animated.div
+          ref={containerRef}
+          style={{
+            transform: springs.x.to(x => `translateX(${x}%)`),
+          }}
+          className="flex whitespace-nowrap"
+          onMouseEnter={() => api.pause()}
+          onMouseLeave={() => api.resume()}
+        >
+          {[...categories, ...categories, ...categories].map((category, idx) => (
+            
+            <Button
+              className="mx-4 flex-shrink-0"
+              key={`${category.id}-${idx}`}
+              variant="outline"
+            >
+              {category.label}
+            </Button>
+            
+            
+            
+            
+          ))}
+        </animated.div>
+      </div>
+    );
+  }
+
 function StudentHomePage() {
 
     const {coursesList, setCoursesList} = useContext(StudentContext);
+    const navigate = useNavigate()
 
     async function fetchAllStudentCourses(){
         const courses = await fetchAllStudentCoursesService();
@@ -24,9 +84,7 @@ function StudentHomePage() {
     <div className="min-h-screen bg-white w-full ">
         <section className="flex flex-col lg:flex-row items-center justify-between py-8 px-4 lg:px-8">
             <div className="lg:w-1/2 lg:pr-12 ">
-            <h1 className="text-5xl font-bold mb-4">Enriching the lives of others through education.</h1>
-            <p className="text-2xl mb-4">Want better results? Get Started with us.</p>
-
+            <Flip/>
             </div>
             <div className="lg:w-full mb-8 lg:mb-0">
             <img src={banner} 
@@ -37,17 +95,14 @@ function StudentHomePage() {
             />
             </div>
         </section>
-        <section className="bg-gray-100 py-8 px-4 lg:px-8">
-            <h2 className="text-2xl text-center font-bold mb-6 ">
-                Categories
-            </h2>
-            <div className="grid grid_cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {courseCategories.map(categoryItem=> 
-                    <Button className="justidy start" key={categoryItem.id} variant="outline">
-                        {categoryItem.label}
-                    </Button>
-                )}
+        <section className="bg-gray-100 py-8 px-4 lg:px-8 overflow-hidden">
+            <h2 className="text-2xl text-center font-bold mb-6">Categories</h2>
+            
+            <div className="relative overflow-hidden py-4">
+                <CategoryTrack categories={[...courseCategories, ...courseCategories]} reverse={false} />
             </div>
+            
+
         </section>
 
         <section className="py-12 px-4 lg:px-8">
@@ -56,7 +111,7 @@ function StudentHomePage() {
                 {
                     coursesList && coursesList.length > 0 ?
                     coursesList.map(course => 
-                        <div className="bg-white border rounded-lg overflow-hidden shadow-lg p-4 hover:bg-gray-100 cursor-pointer" key={course._id}>
+                        <div className="bg-white border rounded-lg overflow-hidden shadow-lg p-4 hover:bg-gray-100 cursor-pointer" key={course._id} onClick={() => navigate(`/course/details/${course._id}`)}>
                             <img 
                                 src={course.image} 
                                 alt={course.title}
