@@ -1,7 +1,7 @@
-const paypal = require('../../helpers/paypal');
-const Order = require('../../models/Order');
-const StudentCourses = require('../../models/StudentCourses');
-const Course = require('../../models/Course');
+const paypal = require("../../helpers/paypal");
+const Order = require("../../models/Order");
+const Course = require("../../models/Course");
+const StudentCourses = require("../../models/StudentCourses");
 
 
 const createOrder = async (req, res) => {
@@ -125,47 +125,51 @@ const capturePaymentFinalizeOrder = async (req, res) => {
 
         await order.save();
 
-        // Fix: Changed StudentCourses to studentCourses
-        let studentCourses = await StudentCourses.findOne({
-            userId: order.userId
+        //update out student course model
+    const studentCourses = await StudentCourses.findOne({
+        userId: order.userId,
+      });
+  
+      if (studentCourses) {
+        studentCourses.courses.push({
+          courseId: order.courseId,
+          title: order.courseTitle,
+          instructorId: order.instructorId,
+          instructorName: order.instructorName,
+          dateOfPurchase: order.orderDate,
+          courseImage: order.courseImage,
         });
-
-        if (studentCourses) { // Fix: Changed StudentCourses to studentCourses
-            studentCourses.courses.push({
-                courseId: order.courseId,
-                title: order.courseTitle,
-                instructorId: order.instructorId,
-                instructorName: order.instructorName,
-                dateOfPurchase: new Date(),
-                courseImage: order.courseImage
-            });
-
-            await studentCourses.save();
-        } else {
-            const newStudentCourses = new StudentCourses({
-                userId: order.userId,
-                courses: [{
-                    courseId: order.courseId,
-                    title: order.courseTitle,
-                    instructorId: order.instructorId,
-                    instructorName: order.instructorName,
-                    dateOfPurchase: new Date(),
-                    courseImage: order.courseImage
-                }]
-            });
-            studentCourses = await newStudentCourses.save();
-        }
-
-        await Course.findByIdAndUpdate(order.courseId, {
-            $addToSet: {
-                students: {
-                    studentId: order.userId,
-                    studentName: order.userName,
-                    studentEmail: order.userEmail,
-                    amountPaid: order.coursePricing
-                }
-            }
+  
+        await studentCourses.save();
+      } else {
+        const newStudentCourses = new StudentCourses({
+          userId: order.userId,
+          courses: [
+            {
+              courseId: order.courseId,
+              title: order.courseTitle,
+              instructorId: order.instructorId,
+              instructorName: order.instructorName,
+              dateOfPurchase: order.orderDate,
+              courseImage: order.courseImage,
+            },
+          ],
         });
+  
+        await newStudentCourses.save();
+      }
+  
+      //update the course schema students
+      await Course.findByIdAndUpdate(order.courseId, {
+        $addToSet: {
+          students: {
+            studentId: order.userId,
+            studentName: order.userName,
+            studentEmail: order.userEmail,
+            paidAmount: order.coursePricing,
+          },
+        },
+      });
 
         res.status(200).json({
             success: true,
