@@ -2,7 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import {StudentContext} from '../../../context/student-context';
 import { fetchStudentPurchasedCoursesService } from '@/services';
 import { AuthContext } from '@/context/auth-context';
-import {Button} from '@/components/ui/Button';
+import {Button} from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Watch } from 'lucide-react';
