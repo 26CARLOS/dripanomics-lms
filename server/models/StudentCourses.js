@@ -15,4 +15,7 @@ const studentCoursesSchema = new mongoose.Schema({
     }]
 });
 
-module.exports = mongoose.models.StudentCourses || mongoose.model('StudentCourses', studentCoursesSchema);
+// Fix: Check if model exists before compiling
+const StudentCourses = mongoose.models.StudentCourses || mongoose.model('StudentCourses', studentCoursesSchema);
+
+module.exports = StudentCourses;
