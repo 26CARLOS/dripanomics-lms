@@ -1,4 +1,4 @@
-const StudentCourses = require("../../models/studentCourses");
+const StudentCourses = require("../../models/StudentCourses");
 
 
 const getCoursesByStudentId = async (req, res) => {
