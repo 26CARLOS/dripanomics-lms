@@ -1,6 +1,6 @@
-
-
 const Course = require('../../models/Course');
+const StudentCourses = require('../../models/StudentCourses');
+
 const getAllStudentCourses = async (req, res) => {
     try {
       const {
@@ -77,12 +77,12 @@ const getCourseDetails = async (req, res) => {
                 message: 'Course not found',
                 data: null
             });
-        }
+        }      
 
         res.status(200).json({
             success: true,
             message: 'Course details retrieved successfully',
-            data: courseDetails
+            data: courseDetails,
         })
 
         
@@ -92,6 +92,30 @@ const getCourseDetails = async (req, res) => {
              message: error.message 
             });
     }
+};
+
+const checkCoursePurchaseInfo = async (req, res) => {
+  try {
+    const { id, studentId } = req.params;
+    const studentCourses = await StudentCourses.findOne({
+      userId: studentId,
+    })
+
+    const studentOwnsCourse = studentCourses.courses.findIndex(item => item.courseId === id) > -1
+    res.status(200).json({
+      success: true,
+      message: 'Course details retrieved successfully',
+      data : studentOwnsCourse
+  })
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+        success: false,
+         message: error.message
+        })
+    
+  }
 }
 
-module.exports = {getAllStudentCourses, getCourseDetails};
+module.exports = {getAllStudentCourses, getCourseDetails, checkCoursePurchaseInfo};

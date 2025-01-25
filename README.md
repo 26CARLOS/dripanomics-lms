@@ -1,6 +1,6 @@
-# Online Learning Platform
+# Online Tutorials Platform
 
-A full-stack MERN application for creating and managing online courses. Built with React, Express, MongoDB, and Node.js.
+MERN Stack Architecture with an MVC-inspired backend.
 
 ## Features
 

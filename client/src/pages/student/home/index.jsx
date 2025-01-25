@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Flip from "@/components/animated/flip";
 import { useSpring, animated } from '@react-spring/web';
 import { useRef, useState } from 'react';
+import {AuthContext} from '@/context/auth-context'
 
 function CategoryTrack({ categories, reverse }) {
     const containerRef = useRef(null);
@@ -66,6 +67,7 @@ function CategoryTrack({ categories, reverse }) {
 function StudentHomePage() {
 
     const {coursesList, setCoursesList} = useContext(StudentContext);
+    const{auth} = useContext(AuthContext);
     const navigate = useNavigate()
 
     async function fetchAllStudentCourses(){
@@ -111,7 +113,7 @@ function StudentHomePage() {
                 {
                     coursesList && coursesList.length > 0 ?
                     coursesList.map(course => 
-                        <div className="bg-white border rounded-lg overflow-hidden shadow-lg p-4 hover:bg-gray-100 cursor-pointer" key={course._id} onClick={() => navigate(`/course/details/${course._id}`)}>
+                        <div className="bg-white border rounded-lg overflow-hidden shadow-lg p-4 hover:bg-gray-100 cursor-pointer" key={course._id} onClick={() => navigate(`/course/details/${course?._id}/${auth?.user?._id}`)}>
                             <img 
                                 src={course.image} 
                                 alt={course.title}

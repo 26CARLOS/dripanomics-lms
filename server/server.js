@@ -6,7 +6,8 @@ const authRoutes = require('./routes/auth-routes/index');
 const mediaRoutes = require('./routes/instructor-routes/media-routes');
 const InstructorCourseRoutes = require('./routes/instructor-routes/course-routes');
 const StudentCourseRoutes = require('./routes/student-routes/course-routes');
-
+const OrderRoutes = require('./routes/student-routes/order-routes');
+const StudentCourses_Routes = require('./routes/student-routes/student-courses-routes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -54,12 +55,23 @@ app.options('*', cors({
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// Routes
+// Routes////////////////////////////////////////
+//auth routes
 app.use('/auth', authRoutes);
+
+//media routes
 app.use('/media', mediaRoutes);
+
+//course routes
 app.use('/admin/course', InstructorCourseRoutes);
 app.use('/student/course', StudentCourseRoutes);
 
+//order routes
+app.use('/student/order', OrderRoutes);
+
+//student courses routes(purchased courses)
+app.use('/student/my-courses', StudentCourses_Routes);
+//////////////////////////////////////////////////
 
 // Error handling middleware
 app.use((err, req, res, next) => {

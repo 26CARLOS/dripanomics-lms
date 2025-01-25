@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
+// Create the schema
 const StudentCoursesSchema = new mongoose.Schema({
-    userId : String,
-    courses : [
+    userId: String,
+    courses: [
         {
             courseId: String,
             title: String,
@@ -12,6 +13,7 @@ const StudentCoursesSchema = new mongoose.Schema({
             courseImage: String
         }
     ]
-})
+});
 
-module.exports = mongoose.model('StudentCourses', StudentCoursesSchema);
+// Export the model only if it hasn't been compiled yet
+module.exports = mongoose.models.StudentCourses || mongoose.model('StudentCourses', StudentCoursesSchema);

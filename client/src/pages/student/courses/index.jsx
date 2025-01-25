@@ -7,10 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { StudentContext } from "@/context/student-context";
 import { useEffect, useContext} from "react";
-import { fetchAllStudentCoursesService } from "@/services";
+import { fetchAllStudentCoursesService, checkCoursePurchaseInfoService } from "@/services";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
+import {AuthContext} from "@/context/auth-context";
+
 
 function createSearchParams(filterParams) {
     const queryParams = [];
@@ -32,6 +34,7 @@ function StudentViewCoursesPage(){
     const [filters, setFilters] = useState({});
     const [searchParams, setSearchParams] = useSearchParams({});
     const {coursesList, setCoursesList, loading, setLoading} = useContext(StudentContext);
+    const {auth} = useContext(AuthContext);
     const navigate = useNavigate();
 
     function handleFilterOnChange(getSectionId, getCurrentOption) {
@@ -78,12 +81,14 @@ function StudentViewCoursesPage(){
           getCurrentCourseId,
           auth?.user?._id
         );
+
+        console.log(response);
     
         if (response?.success) {
           if (response?.data) {
             navigate(`/course-progress/${getCurrentCourseId}`);
           } else {
-            navigate(`/course/details/${getCurrentCourseId}`);
+            navigate(`/course/details/${getCurrentCourseId}/${auth?.user?._id}`);
           }
         }
       }
@@ -115,7 +120,7 @@ function StudentViewCoursesPage(){
                 All Courses
              </h1>
              <div className="flex flex-col md:flex-row gap-4">
-                <aside className="w-full md:w-64 space-y-4">
+                <aside className="w-full md:w-64 space-y-4 sticky">
                     <div className=" ">
                         {
                             Object.keys(filterOptions).map(filterOption =>
@@ -148,7 +153,7 @@ function StudentViewCoursesPage(){
 
                 </aside>
                 <main className="flex-1">
-                    <div className="flex justify-end items-center mb-4 gap-5"> 
+                    <div className="flex justify-between items-center mb-4 gap-5"> 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="sm" className="flex items-center gap-2 p-4"> 
@@ -175,7 +180,7 @@ function StudentViewCoursesPage(){
                     {coursesList && coursesList.length > 0 ? (
               coursesList.map((courseItem) => (
                 <Card
-                  onClick={() => navigate(`/course/details/${courseItem?._id}`)}
+                  onClick={()=>handleCourseNavigate(courseItem?._id)}
                   className="cursor-pointer"
                   key={courseItem?._id}
                 >

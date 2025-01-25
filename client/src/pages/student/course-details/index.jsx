@@ -2,7 +2,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams  } from 'react-router-dom';
 import { StudentContext } from '../../../context/student-context';
-import { fetchAdminCourseDetailsService } from '@/services';
+import { AuthContext } from '@/context/auth-context';
+import { createPaymentService, fetchStudentCourseDetailsService } from '@/services';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Dialog,
@@ -33,19 +34,26 @@ function SudentCourseDetials () {
         setLoading
     } = useContext(StudentContext);
 
+    const {auth} = useContext(AuthContext);
+
     const [displayCurrentFreePreview, setDisplayCurrentFreePreview] = useState(null);
     const [showFreePreviewDialog, setShowFreePreviewDialog] = useState(false);
+    const [aprovalUrl, setAprovalUrl] = useState('');
 
     const {id} = useParams();
     
     const location = useLocation();
 
-    async function fetchAdminCourseDetails(courseId) {
-        const response = await fetchAdminCourseDetailsService(courseId);
+    async function fetchStudentCourseDetails(courseId ) {
+        const response = await fetchStudentCourseDetailsService(courseId);
         console.log('response', response);
 
         if(response?.success) {
-            setStudentViewCourseDetials(response.data);
+            setStudentViewCourseDetials(response?.data);
+            setLoading(false);
+        }else{
+          setcoursePurchased_id(false);
+            setStudentViewCourseDetials(null);
             setLoading(false);
         }
         
@@ -65,7 +73,7 @@ function SudentCourseDetials () {
 
     useEffect(() => {
         if(currentCourseId) {
-            fetchAdminCourseDetails(currentCourseId);
+          fetchStudentCourseDetails(currentCourseId);
         }
     },[currentCourseId])
 
@@ -77,7 +85,7 @@ function SudentCourseDetials () {
 
     useEffect(() => {
         if(!location.pathname.includes('/course/details')) {
-            setStudentViewCourseDetials(null);
+            setStudentViewCourseDetials(null),
             setCurrentCourseId(null);
             setLoading(true);
         }
@@ -86,22 +94,60 @@ function SudentCourseDetials () {
     if (loading) {
         return <LoadingSkeleton />
       }
+
+      if(aprovalUrl!==''){
+        window.location.href = aprovalUrl;
+      }
     
       if (!studentViewCourseDetials) {
         return <div className="text-center py-10">No course details found.</div>
       }
 
       const getFreePreviewIndex = studentViewCourseDetials !==null ? 
-        studentViewCourseDetials.curriculum.findIndex((lecture) => lecture.freePreview) : null;
+        studentViewCourseDetials.curriculum.findIndex((lecture) => lecture.freePreview) : -1;
     
-        console.log('getFreePreviewIndex', getFreePreviewIndex);
-        
+      async function handleCreatePayment() {
+        const paymentPayload={
+        userId : auth?.user?._id,
+        userName : auth?.user?.userName,
+        userEmail : auth?.user?.userEmail,
+        orderStatus : 'pending',
+        paymentMethod : 'paypal',
+        paymentStatus : 'initiated',
+        orderDate : new Date(),
+        paymentId : '',
+        payerId : '',
+        instructorId : studentViewCourseDetials?.instructorId, 
+        instructorName : studentViewCourseDetials?.InstructorName, 
+        courseImage : studentViewCourseDetials?.image,
+        courseTitle : studentViewCourseDetials?.title,
+        courseId : studentViewCourseDetials?._id,
+        coursePricing: studentViewCourseDetials?.pricing
+        }
+
+        console.log('paymentPayload', paymentPayload);
+
+        const response = await createPaymentService(paymentPayload);
+        console.log('response', response);
+        if(response?.success) {
+          sessionStorage.setItem('currentOrder_id', JSON.stringify(response?.data?.order_id));
+          setAprovalUrl(response?.data?.approveUrl);
+          }else{
+
+          }
+      }    
+      
+      
       return (
         <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
           <div className="bg-gray-900 text-white p-8 rounded-lg mb-4">
-        <h1 className="text-3xl font-bold mb-4">
-          {studentViewCourseDetials?.title}
-        </h1>
+          <div className='flex items-center gap-4 justify-between'>
+            <h1 className="text-3xl font-bold mb-4">
+              {studentViewCourseDetials?.title}
+            </h1>
+            <Badge className="mb-4 bg-white text-black rounded-full hover:bg-gray-700 cursor-pointer">{studentViewCourseDetials?.category}</Badge>
+          </div>
+
         <p className="text-xl mb-4">{studentViewCourseDetials?.subtitle}</p>
         <div className="flex items-center space-x-4 mt-2 text-sm">
           <span>Created By {studentViewCourseDetials?.InstructorName}</span>
@@ -177,7 +223,7 @@ function SudentCourseDetials () {
                   R{studentViewCourseDetials?.pricing.toFixed(2)}
                 </span>
               </div>
-              <Button className="w-full">
+              <Button onClick={handleCreatePayment} className="w-full">
                 Buy Now
               </Button>
             </CardContent>

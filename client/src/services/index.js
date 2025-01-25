@@ -96,8 +96,39 @@ export async function fetchAllStudentCoursesService(query){
     return data;
 }
 
-export async function fetchCourseDetailsService(id){
+export async function fetchStudentCourseDetailsService(id){
     const { data } = await axiosInstance.get(`/student/course/get/details/${id}`);
 
+    return data;
+}
+
+export async function createPaymentService(data){
+    const { data: responseData } = await axiosInstance.post(`/student/order/create-order`, data);
+
+    return responseData;
+}
+
+export async function finalizePaymentsService(order_id, paymentId, payerId){
+    const { data } = await axiosInstance.post(`/student/order/finalize`, {order_id, paymentId, payerId});
+
+    return data;
+
+}
+
+
+
+export async function fetchStudentPurchasedCoursesService(studentid){
+    const { data } = await axiosInstance.get(`/student/my-courses/get/${studentid}`);
+    return data;
+}
+
+export async function checkCoursePurchaseInfoService(id, studentId){
+    const { data } = await axiosInstance.get(`student/course/purchase-info/${id}/${studentId}`);
+
+    return data;
+}
+
+export async function verifyEmailService(token) {
+    const { data } = await axiosInstance.get(`/auth/verify/${token}`);
     return data;
 }
