@@ -1,11 +1,11 @@
-const studentCourses = require("../../models/studentCourses");
+const StudentCourses = require("../../models/studentCourses");
 
 
 const getCoursesByStudentId = async (req, res) => {
     try {
         const studentId = req.params.studentId;
 
-        const studentPurchasedCourses= await studentCourses.findOne(
+        const studentPurchasedCourses= await StudentCourses.findOne(
             { 
                 userId: studentId 
             });
