@@ -139,31 +139,27 @@ function AddNewCoursePage() {
 
     return ( 
         <div className="container mx-auto p-4">
-            <div className="flex justify-between">
-                <h1 className="text-3xl font-semibold mb-5">{currentEditedCourseId ? "Edit Course":"Create a new course"}</h1>
-                <Button 
-                disabled={!validateForm()} 
-                className="text-sm trackin-wider font-bold px-8"
-                onClick={handleCreateCourse}
-                >
-                    SUBMIT
-                </Button>
-            </div>
-            <Card>
-                    <CardContent >
-                        <div className="Ccontainer mx-auto px-4">
-                            <Tabs defaultValue="curriculum" className="space-y-4">
-                                <TabsList>
-                                    <TabsTrigger value="curriculum">
-                                        Curriculum
-                                    </TabsTrigger>
-                                    <TabsTrigger value="course-landing-page">
-                                        Course Landing Page
-                                    </TabsTrigger>
-                                    <TabsTrigger value="settings">
-                                        Settings
-                                    </TabsTrigger>
-                                </TabsList>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-5 gap-4">
+          <h1 className="text-2xl md:text-3xl font-semibold">
+            {currentEditedCourseId ? "Edit Course" : "Create a new course"}
+          </h1>
+          <Button 
+            disabled={!validateForm()} 
+            className="w-full md:w-auto text-sm tracking-wider font-bold px-8"
+            onClick={handleCreateCourse}
+          >
+            SUBMIT
+          </Button>
+        </div>
+        <Card>
+          <CardContent>
+            <div className="container mx-auto px-0 md:px-4">
+              <Tabs defaultValue="curriculum" className="space-y-4">
+                <TabsList className="flex flex-row md:flex-row w-full">
+                  <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
+                  <TabsTrigger value="course-landing-page">Course Landing Page</TabsTrigger>
+                  <TabsTrigger value="settings">Settings</TabsTrigger>
+                </TabsList>
                                 <TabsContent value="curriculum">
                                     <CourseCurriculum/>
                                 </TabsContent>

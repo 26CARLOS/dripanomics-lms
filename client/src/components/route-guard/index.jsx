@@ -2,24 +2,21 @@ import { Fragment } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 function RouteGuard({authenticated, user, element}){
-
     const location = useLocation();
-    console.log(authenticated, user)
+
+    // Redirect unauthenticated users to login
     if(!authenticated && !location.pathname.includes('/auth')){
         return <Navigate to='/auth' />
     }
 
-    if(authenticated && user?.role !== 'admin'
-
-        && (location.pathname.includes('admin') || location.pathname.includes('/auth')) )
-        {
+    // Prevent non-admin users from accessing admin routes
+    if(authenticated && user?.role !== 'admin' && location.pathname.includes('admin')){
         return <Navigate to='/home' />
     }
 
-    if(authenticated && user.role === 'admin'
-        && !location.pathname.includes('admin'))
-        {
-        return <Navigate to='/admin' />
+    // Prevent authenticated users from accessing auth pages
+    if(authenticated && location.pathname.includes('/auth')){
+        return <Navigate to={user?.role === 'admin' ? '/admin' : '/home'} />
     }
 
     return <Fragment>{element}</Fragment>

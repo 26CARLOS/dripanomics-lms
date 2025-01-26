@@ -8,7 +8,7 @@ import { Link } from "react-router-dom"
  * @param {Object} props
  * @param {Function} props.onLogOut - Function to handle logout
  */
-function MobileMenu({ onLogOut }) {
+function MobileMenu({ onLogOut, isAdmin }) {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleMenu = () => setIsOpen(!isOpen)
@@ -28,9 +28,17 @@ function MobileMenu({ onLogOut }) {
         <Link to="/courses" className="block transition-colors duration-200 hover:text-primary" onClick={toggleMenu}>
           Explore Courses
         </Link>
-        <Link to="/my-courses" className="block transition-colors duration-200 hover:text-primary" onClick={toggleMenu}>
+        {!isAdmin && (<Link to="/my-courses" className="block transition-colors duration-200 hover:text-primary" onClick={toggleMenu}>
           My Courses
-        </Link>
+        </Link>)}
+
+        {/* Add Admin Navigation for admin users */}
+        {isAdmin && (
+          <Link to="/admin" className="block transition-colors duration-200 hover:text-primary">
+            Admin Dashboard
+          </Link>
+        )}
+
         <Button
           onClick={() => {
             onLogOut()

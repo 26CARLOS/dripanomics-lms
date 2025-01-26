@@ -22,7 +22,8 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { PlayCircle,Lock,Globe } from 'lucide-react';
 import VideoPlayer from '@/components/video-player';
-
+import {checkCoursePurchaseInfoService} from '@/services'
+ 
 function SudentCourseDetials () {
 
     const {
@@ -45,6 +46,9 @@ function SudentCourseDetials () {
     const location = useLocation();
 
     async function fetchStudentCourseDetails(courseId ) {
+
+      const checkCoursePurchasedInfoResponse = await checkCoursePurchaseInfoService(courseId, auth?.user._id)
+
         const response = await fetchStudentCourseDetailsService(courseId);
         console.log('response', response);
 
