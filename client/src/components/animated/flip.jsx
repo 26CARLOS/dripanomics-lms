@@ -16,10 +16,10 @@ export default function Flip() {
     },
     enter: [
       { opacity: 1, height: 85, innerHeight: 80 },
-      { transform: 'perspective(600px) rotateX(180deg)', color: '#111827' },
+      { transform: 'perspective(600px) rotateX(180deg)', color: '#E0AA3E' },
       { transform: 'perspective(600px) rotateX(0deg)' },
     ],
-    leave: [{ color: '#1F2937' }, { innerHeight: 0 }, { opacity: 0, height: 0 }],
+    leave: [{ color: '#E0AA3E' }, { innerHeight: 0 }, { opacity: 0, height: 0 }],
     update: { color: '#374151' },
   })
 
