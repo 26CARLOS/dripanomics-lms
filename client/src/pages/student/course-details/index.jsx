@@ -110,38 +110,62 @@ function SudentCourseDetials () {
       const getFreePreviewIndex = studentViewCourseDetials !==null ? 
         studentViewCourseDetials.curriculum.findIndex((lecture) => lecture.freePreview) : -1;
     
+      // async function handleCreatePayment() {
+      //   const paymentPayload={
+      //   userId : auth?.user?._id,
+      //   userName : auth?.user?.userName,
+      //   userEmail : auth?.user?.userEmail,
+      //   orderStatus : 'pending',
+      //   paymentMethod : 'paypal',
+      //   paymentStatus : 'initiated',
+      //   orderDate : new Date(),
+      //   paymentId : '',
+      //   payerId : '',
+      //   instructorId : studentViewCourseDetials?.instructorId, 
+      //   instructorName : studentViewCourseDetials?.InstructorName, 
+      //   courseImage : studentViewCourseDetials?.image,
+      //   courseTitle : studentViewCourseDetials?.title,
+      //   courseId : studentViewCourseDetials?._id,
+      //   coursePricing: studentViewCourseDetials?.pricing
+      //   }
+
+      //   console.log('paymentPayload', paymentPayload);
+
+      //   const response = await createPaymentService(paymentPayload);
+      //   console.log('response', response);
+      //   if(response?.success) {
+      //     sessionStorage.setItem('currentOrder_id', JSON.stringify(response?.data?.order_id));
+      //     setAprovalUrl(response?.data?.approveUrl);
+      //     }else{
+
+      //     }
+      // }    
+      
+     
       async function handleCreatePayment() {
-        const paymentPayload={
-        userId : auth?.user?._id,
-        userName : auth?.user?.userName,
-        userEmail : auth?.user?.userEmail,
-        orderStatus : 'pending',
-        paymentMethod : 'paypal',
-        paymentStatus : 'initiated',
-        orderDate : new Date(),
-        paymentId : '',
-        payerId : '',
-        instructorId : studentViewCourseDetials?.instructorId, 
-        instructorName : studentViewCourseDetials?.InstructorName, 
-        courseImage : studentViewCourseDetials?.image,
-        courseTitle : studentViewCourseDetials?.title,
-        courseId : studentViewCourseDetials?._id,
-        coursePricing: studentViewCourseDetials?.pricing
-        }
-
-        console.log('paymentPayload', paymentPayload);
-
+        const paymentPayload = {
+            userId: auth?.user?._id,
+            userName: auth?.user?.userName,
+            userEmail: auth?.user?.userEmail,
+            courseTitle: studentViewCourseDetials?.title,
+            courseId: studentViewCourseDetials?._id,
+            coursePricing: studentViewCourseDetials?.pricing,
+            instructorId: studentViewCourseDetials?.instructorId,
+            instructorName: studentViewCourseDetials?.InstructorName,
+            courseImage: studentViewCourseDetials?.image,
+        };
+    
         const response = await createPaymentService(paymentPayload);
-        console.log('response', response);
-        if(response?.success) {
-          sessionStorage.setItem('currentOrder_id', JSON.stringify(response?.data?.order_id));
-          setAprovalUrl(response?.data?.approveUrl);
-          }else{
-
-          }
-      }    
-      
-      
+    
+        if (response?.success) {
+            // Redirect the user to the PayFast payment page
+            console.log('response', response.data);
+            
+            window.location.href = response.data.payfastUrl;
+        } else {
+            console.error('Error initiating PayFast payment:', response?.message);
+        }
+    }
       return (
         <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
           <div className="bg-gray-900 text-white p-8 rounded-lg mb-4">

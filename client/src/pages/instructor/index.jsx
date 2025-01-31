@@ -41,7 +41,7 @@ function InstructorDashboardPage () {
             icon: BarChart,
             label: 'Dashboard',
             value: 'dashboard',
-            component: <AdminDashboard/>
+            component: <AdminDashboard coursesList={adminCourseList}/>
         },
         {
             icon: Book,

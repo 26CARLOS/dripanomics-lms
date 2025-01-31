@@ -99,23 +99,32 @@ const checkCoursePurchaseInfo = async (req, res) => {
     const { id, studentId } = req.params;
     const studentCourses = await StudentCourses.findOne({
       userId: studentId,
-    })
+    });
 
-    const studentOwnsCourse = studentCourses.courses.findIndex(item => item.courseId === id) > -1
+    // Check if studentCourses exists before accessing courses
+    if (!studentCourses) {
+      return res.status(200).json({
+        success: true,
+        message: 'Student has no courses yet',
+        data: false
+      });
+    }
+
+    const studentOwnsCourse = studentCourses.courses.findIndex(item => item.courseId === id) > -1;
+    
     res.status(200).json({
       success: true,
       message: 'Course details retrieved successfully',
-      data : studentOwnsCourse
-  })
+      data: studentOwnsCourse
+    });
     
   } catch (error) {
     console.log(error);
     res.status(500).json({
-        success: false,
-         message: error.message
-        })
-    
+      success: false,
+      message: error.message
+    });
   }
-}
+};
 
 module.exports = {getAllStudentCourses, getCourseDetails, checkCoursePurchaseInfo};

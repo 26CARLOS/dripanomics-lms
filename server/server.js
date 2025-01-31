@@ -38,12 +38,10 @@ mongoose.connect(MONGO_URI, mongooseOptions)
 app.use(cors({
     origin: process.env.CLIENT_URL,
     methods: ['GET', 'POST', "DELETE", "PUT", 'OPTIONS'],
-    allowedHeaders: ['Content-Type', "Authorization"],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-PayFast-Signature'],
     credentials: true,
     exposedHeaders: ['Access-Control-Allow-Origin']
 }));
-
-console.log(process.env.CLIENT_URL)
 
 //pre-flight requests
 app.options('*', cors({
@@ -54,6 +52,7 @@ app.options('*', cors({
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.raw({ type: 'application/x-www-form-urlencoded' }));
 
 // Routes////////////////////////////////////////
 //auth routes

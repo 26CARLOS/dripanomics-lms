@@ -1,12 +1,12 @@
 const express = require("express");
 const {
-  createOrder,
-  capturePaymentFinalizeOrder,
+  createPayFastOrder,
+  handlePayFastNotification,
 } = require("../../controllers/student-controller/order-controller");
 const router = express.Router();
 
-router.post('/create-order', createOrder);
-router.post('/finalize', capturePaymentFinalizeOrder);
+router.post('/create', createPayFastOrder);
+router.post('/notify', handlePayFastNotification);
 
 module.exports = router;
 
