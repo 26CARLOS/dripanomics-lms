@@ -22,7 +22,7 @@ function StudentViewCommonHeader() {
         <Link to="home" className="flex items-center space-x-2">
           <GraduationCap className="h-8 w-8 mr-2 hover:text-gray-800" />
           <span className="font-extrabold text-lg md:text-xl">Dripanomics Tutorials</span>
-          <Badge>Admin</Badge>
+          {auth?.user?.role !== 'user'&&(<Badge>Admin</Badge>)}
         </Link>
       </div>
 
@@ -30,7 +30,7 @@ function StudentViewCommonHeader() {
         <Button variant="ghost" className="text-base font-medium" onClick={() => navigate("/courses")}>
           Explore Courses
         </Button>
-        {auth?.user?.role === 'student' &&(<div onClick={() => navigate("/my-courses")} className="cursor-pointer flex items-center space-x-2">
+        {auth?.user?.role === 'user' &&(<div onClick={() => navigate("/my-courses")} className="cursor-pointer flex items-center space-x-2">
           <span className="font-medium text-base">My Courses</span>
           <TvMinimalPlay className="h-5 w-5" />
         </div>)}
