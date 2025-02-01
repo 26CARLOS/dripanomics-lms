@@ -6,6 +6,7 @@ import { useContext } from "react"
 import { AuthContext } from "../../context/auth-context"
 import { useNavigate } from "react-router-dom"
 import MobileMenu  from "./mobile-menu"
+import CartIcon from "@/components/cart/cart-icon"
 
 function StudentViewCommonHeader() {
   const navigate = useNavigate()
@@ -17,7 +18,7 @@ function StudentViewCommonHeader() {
   }
 
   return (
-    <header className="flex items-center justify-between p-4 border-b relative w-full">
+    <header className="flex items-center justify-between p-4 border-b w-full z-10 bg-white relative" >
       <div className="flex items-center">
         <Link to="home" className="flex items-center space-x-2">
           <GraduationCap className="h-8 w-8 mr-2 hover:text-gray-800" />
@@ -32,7 +33,7 @@ function StudentViewCommonHeader() {
         </Button>
         {auth?.user?.role === 'user' &&(<div onClick={() => navigate("/my-courses")} className="cursor-pointer flex items-center space-x-2">
           <span className="font-medium text-base">My Courses</span>
-          <TvMinimalPlay className="h-5 w-5" />
+          
         </div>)}
 
       {/* Add Admin Navigation for admin users */}
@@ -41,6 +42,8 @@ function StudentViewCommonHeader() {
                   Admin Dashboard
                 </Button>
         )}
+
+        <CartIcon className="cursor-pointer"/>
         
         <Button onClick={handleLogOut} className="text-base font-medium">
           Sign Out

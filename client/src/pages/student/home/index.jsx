@@ -1,14 +1,16 @@
 import { Button } from "@/components/ui/button";
+import {Card, CardContent, CardFooter} from "@/components/ui/card"
 import banner from "/banner.jpeg"
 import { courseCategories } from "@/config";
 import { StudentContext } from "@/context/student-context";
 import { useContext, useEffect } from "react";
-import { fetchAllStudentCoursesService } from "@/services";
+import { fetchAllStudentCoursesService, getCartService, checkCoursePurchaseInfoService } from "@/services";
 import { useNavigate } from "react-router-dom";
 import Flip from "@/components/animated/flip";
 import { useSpring, animated } from '@react-spring/web';
 import { useRef, useState } from 'react';
 import {AuthContext} from '@/context/auth-context'
+import AddToCart from "@/components/cart/add-to-cart"
 
 function CategoryTrack({ categories, reverse }) {
     const containerRef = useRef(null);
@@ -66,7 +68,7 @@ function CategoryTrack({ categories, reverse }) {
 
 function StudentHomePage() {
 
-    const {coursesList, setCoursesList} = useContext(StudentContext);
+    const {coursesList, setCoursesList, setCartCount} = useContext(StudentContext);
     const{auth} = useContext(AuthContext);
     const navigate = useNavigate()
 
@@ -78,21 +80,48 @@ function StudentHomePage() {
         }
     }
 
+    async function handleCourseNavigate(getCurrentCourseId) {
+            const response = await checkCoursePurchaseInfoService(
+              getCurrentCourseId,
+              auth?.user?._id
+            );
+    
+        
+            if (response?.success) {
+              if (response?.data) {
+               return navigate(`/course-progress/${getCurrentCourseId}`);
+              } else {
+                return navigate(`/course/details/${getCurrentCourseId}/${auth?.user?._id}`);
+              }
+            }
+          }
+
+    async function fetchCart(){
+      const cart = await getCartService(auth?.user?._id);
+      if(cart?.success){
+        setCartCount(cart?.data?.items?.length);
+      }
+    }
+
     useEffect(() => {
         fetchAllStudentCourses();
     },[])
 
+    useEffect(() => {
+      fetchCart();
+  },[])
+
     return (
-    <div className="min-h-screen bg-white w-full ">
-        <section className="flex flex-col lg:flex-row items-center justify-between py-8 px-4 lg:px-8">
-            <div className="lg:w-1/2 lg:pr-12 ">
+    <div className="min-h-screen bg-white w-full">
+        <section className="flex flex-col lg:flex-row items-center justify-between py-8 px-4 lg:px-8 ">
+            <div className="lg:w-1/2 lg:pr-12 mb-8 lg:mb-0">
             <Flip/>
             </div>
-            <div className="lg:w-full mb-8 lg:mb-0">
+            <div className="lg:w-full lg:mb-0 ">
             <img src={banner} 
-                width={600}
-                height={400}
-                className="w-full h-auto rounded-lg shadow-lg" 
+                width={500}
+                height={300}
+                className="w-full h-auto rounded-lg shadow-lg " 
                 alt="online tutorials banner"
             />
             </div>
@@ -113,7 +142,8 @@ function StudentHomePage() {
                 {
                     coursesList && coursesList.length > 0 ?
                     coursesList.map(course => 
-                        <div className="bg-white border rounded-lg overflow-hidden shadow-lg p-4 hover:bg-gray-100 cursor-pointer" key={course._id} onClick={() => navigate(`/course/details/${course?._id}/${auth?.user?._id}`)}>
+                      <Card>
+                        <CardContent className="mt-2" onClick={() => handleCourseNavigate(course._id)}>
                             <img 
                                 src={course.image} 
                                 alt={course.title}
@@ -124,8 +154,16 @@ function StudentHomePage() {
                             <h3 className="text-lg font-bold mt-2">{course.title}</h3>
                             <p className="text-sm text-gray-600">By {course.InstructorName}</p>
                             <p className="text-md text-gray-600">{course.description}</p>
-                            <p className="font-bold text-16px">R{course?.pricing.toFixed(2)}</p>
-                        </div>
+                            
+                        </CardContent>
+                        <CardFooter>
+                          <div>
+                              <p className="font-bold text-16px">R{course?.pricing.toFixed(2)}</p>
+                              <AddToCart courseId={course?._id}/>
+                          </div>
+                        </CardFooter>
+                      </Card>
+                        
                 ): <h1>No courses found</h1>
                 }
             </div>

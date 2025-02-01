@@ -15,7 +15,17 @@ const OrderSchema = new mongoose.Schema({
     courseImage: String,
     courseTitle: String,
     courseId: String,
-    coursePricing: String
+    coursePricing: String,
+    cartItems: [
+        {
+            courseId: String,
+            courseTitle: String,
+            courseImage: String,
+            coursePricing: String,
+            instructorId: String,
+            instructorName: String
+        }
+    ]
 })
 
 module.exports = mongoose.model('Order', OrderSchema);

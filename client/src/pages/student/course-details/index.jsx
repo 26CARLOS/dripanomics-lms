@@ -4,7 +4,7 @@ import { useLocation, useParams  } from 'react-router-dom';
 import { StudentContext } from '../../../context/student-context';
 import { AuthContext } from '@/context/auth-context';
 import { createPaymentService, fetchStudentCourseDetailsService } from '@/services';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Dialog,
   DialogClose,
@@ -23,6 +23,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { PlayCircle,Lock,Globe } from 'lucide-react';
 import VideoPlayer from '@/components/video-player';
 import {checkCoursePurchaseInfoService} from '@/services'
+import AddToCart from '@/components/cart/add-to-cart';
  
 function SudentCourseDetials () {
 
@@ -46,8 +47,6 @@ function SudentCourseDetials () {
     const location = useLocation();
 
     async function fetchStudentCourseDetails(courseId ) {
-
-      const checkCoursePurchasedInfoResponse = await checkCoursePurchaseInfoService(courseId, auth?.user._id)
 
         const response = await fetchStudentCourseDetailsService(courseId);
         console.log('response', response);
@@ -251,10 +250,13 @@ function SudentCourseDetials () {
                   R{studentViewCourseDetials?.pricing.toFixed(2)}
                 </span>
               </div>
-              <Button onClick={handleCreatePayment} className="w-full">
-                Buy Now
-              </Button>
             </CardContent>
+            <CardFooter className="space-x-2">
+                <Button onClick={handleCreatePayment} className="w-full">
+                  Buy Now
+                </Button>
+                <AddToCart courseId={studentViewCourseDetials?._id} />
+            </CardFooter>
           </Card>
         </aside>
     </div>
@@ -281,7 +283,7 @@ function SudentCourseDetials () {
                   {
                     studentViewCourseDetials?.curriculum.filter(item=>item.freePreview)
                     .map(filteredItem=>
-                        <p onClick={()=>handleSetFreePreview(filteredItem)} 
+                        <p key={filteredItem._id} onClick={()=>handleSetFreePreview(filteredItem)} 
                         className='cursor-pointer text-[16px] font-medium'>
                             {filteredItem.title}
                             </p>

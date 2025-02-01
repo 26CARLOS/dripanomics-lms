@@ -2,6 +2,8 @@ import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
+import CartIcon from "@/components/cart/cart-icon"
+
 
 /**
  * MobileMenu Component
@@ -14,9 +16,10 @@ function MobileMenu({ onLogOut, isAdmin }) {
   const toggleMenu = () => setIsOpen(!isOpen)
 
   return (
-    <div className="md:hidden">
+    <div className="md:hidden flex fex-row justify-center items-center space-x-4">
+      <CartIcon/>
       <Button variant="ghost" onClick={toggleMenu}>
-        {isOpen ? <X /> : <Menu />}
+        {isOpen ? <X /> : <Menu className='w-8 h-8'/>}
       </Button>
       <div
         className={`
@@ -28,9 +31,11 @@ function MobileMenu({ onLogOut, isAdmin }) {
         <Link to="/courses" className="block transition-colors duration-200 hover:text-primary" onClick={toggleMenu}>
           Explore Courses
         </Link>
-        {!isAdmin && (<Link to="/my-courses" className="block transition-colors duration-200 hover:text-primary" onClick={toggleMenu}>
+        {!isAdmin && (
+          <Link to="/my-courses" className="block transition-colors duration-200 hover:text-primary" onClick={toggleMenu}>
           My Courses
-        </Link>)}
+        </Link>
+      )}
 
         {/* Add Admin Navigation for admin users */}
         {isAdmin && (

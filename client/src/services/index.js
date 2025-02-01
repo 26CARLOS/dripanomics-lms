@@ -104,7 +104,11 @@ export async function fetchStudentCourseDetailsService(id){
 
 export async function createPaymentService(data){
     const { data: responseData } = await axiosInstance.post(`/student/order/create`, data);
+    return responseData;
+}
 
+export async function createCartPaymentService(data){
+    const { data: responseData } = await axiosInstance.post(`/student/order/create-cart`, data);
     return responseData;
 }
 
@@ -124,11 +128,26 @@ export async function fetchStudentPurchasedCoursesService(studentid){
 
 export async function checkCoursePurchaseInfoService(id, studentId){
     const { data } = await axiosInstance.get(`student/course/purchase-info/${id}/${studentId}`);
-
     return data;
 }
 
 export async function verifyEmailService(token) {
     const { data } = await axiosInstance.get(`/auth/verify/${token}`);
+    return data;
+}
+
+
+export async function addToCartService(data) {
+    const { data: responseData } = await axiosInstance.post('/student/cart/add', data);
+    return responseData;
+}
+
+export async function getCartService(userId) {
+    const { data } = await axiosInstance.get(`/student/cart/get/${userId}`);
+    return data;
+}
+
+export async function removeFromCartService(userId, courseId) {
+    const { data } = await axiosInstance.delete(`/student/cart/remove/${userId}/${courseId}`);
     return data;
 }

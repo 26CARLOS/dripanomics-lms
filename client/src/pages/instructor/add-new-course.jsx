@@ -39,30 +39,25 @@ function AddNewCoursePage() {
         console.log('Landing Form Data:', courseLandingFormData);
         console.log('Curriculum Form Data:', courseCurriculumFormData);
         
-        // Check landing page data
-        for(const key in courseLandingFormData){
-            if(isEmpty(courseLandingFormData[key])){
+        // Check landing page data (required fields)
+        for (const key in courseLandingFormData) {
+            if (isEmpty(courseLandingFormData[key])) {
                 console.log('Empty landing page field:', key);
                 return false;
             }
         }
-    
-        let hasFreepreview = false;
-    
-        // Check curriculum data
-        for(const item of courseCurriculumFormData){
-            if(isEmpty(item.title) || isEmpty(item.videoUrl) || isEmpty(item.public_id)){
+
+    // Check curriculum data
+        for (const item of courseCurriculumFormData) {
+            // Only check title if there's a video
+            if (!isEmpty(item.videoUrl) && isEmpty(item.title)) {
                 console.log('Empty curriculum field:', item);
                 return false;
             }
-    
-            if(item.freePreview){
-                hasFreepreview = true;
-            }
         }
-    
-        console.log('Has free preview:', hasFreepreview);
-        return hasFreepreview;
+
+    // Form is valid if we reach here
+        return true;
     }
 
     async function handleCreateCourse(){

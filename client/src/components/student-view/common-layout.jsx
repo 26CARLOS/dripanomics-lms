@@ -5,7 +5,7 @@ import StudentViewCommonHeader from "./header";
 function StudentViewCommonLayout() {
   return (
     <div>
-      <StudentViewCommonHeader/>
+      <StudentViewCommonHeader />
         <Outlet/>
     </div>
   );

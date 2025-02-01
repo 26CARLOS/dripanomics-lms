@@ -14,7 +14,7 @@ import PaymentReturnPage from "./pages/student/payment-return"
 import StudentCoursesPage from "./pages/student/my-courses"
 import StudentViewCourseProgressPage from "./pages/student/course-progress"
 import PaymentCancelPage from "./pages/student/payment-cancel"
-
+import CartPage from './pages/student/cart'
 function App() {
   const { auth } = useContext(AuthContext);
 
@@ -64,7 +64,7 @@ function App() {
         path="/"
         element={
           <RouteGuard
-            element={<StudentViewCommonLayout />}
+            element={<StudentViewCommonLayout/>}
             authenticated={auth?.authenticated}
             user={auth?.user}
           />
@@ -78,7 +78,7 @@ function App() {
         <Route path="/payment-cancel" element={<PaymentCancelPage />} />
         <Route path="/my-courses" element={<StudentCoursesPage />} />
         <Route path="/course-progress/:id" element={<StudentViewCourseProgressPage />} />
-
+        <Route path="/cart" element={<CartPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage/>} />
     </Routes>
