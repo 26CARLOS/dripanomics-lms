@@ -4,7 +4,7 @@ import {StudentContext} from '@/context/student-context'
 import { addToCartService, checkCoursePurchaseInfoService, getCartService } from '@/services';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, PlusCircle, Plus } from 'lucide-react';
 
 
 function AddToCart({ courseId, variant = "" }) {
@@ -55,10 +55,10 @@ function AddToCart({ courseId, variant = "" }) {
         <Button 
           onClick={handleAddToCart} 
           variant={variant}
-          className="w-full"
+          size="sm" className="text-xs sm:text-sm"
         >
           <ShoppingCart className="mr-2 h-4 w-4" />
-          Add to Cart
+          <PlusCircle className="mr-2 h-4 w-4" />
         </Button>
       </div>
       

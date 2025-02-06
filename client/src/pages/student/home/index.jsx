@@ -11,6 +11,10 @@ import { useSpring, animated } from '@react-spring/web';
 import { useRef, useState } from 'react';
 import {AuthContext} from '@/context/auth-context'
 import AddToCart from "@/components/cart/add-to-cart"
+import CourseCard from "@/components/student-view/course-card";
+import { Carousel, CarouselItem, CarouselContent, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Hero } from "@/components/student-view/hero";
+import Autoplay from "embla-carousel-autoplay"
 
 function CategoryTrack({ categories, reverse }) {
     const containerRef = useRef(null);
@@ -56,10 +60,6 @@ function CategoryTrack({ categories, reverse }) {
             >
               {category.label}
             </Button>
-            
-            
-            
-            
           ))}
         </animated.div>
       </div>
@@ -113,8 +113,8 @@ function StudentHomePage() {
 
     return (
     <div className="min-h-screen bg-white w-full">
-        <section className="flex flex-col lg:flex-row items-center justify-between py-8 px-4 lg:px-8 ">
-            <div className="lg:w-1/2 lg:pr-12 mb-8 lg:mb-0">
+        <section >
+            {/* <div className="lg:w-1/2 lg:pr-12 mb-8 lg:mb-0">
             <Flip/>
             </div>
             <div className="lg:w-full lg:mb-0 ">
@@ -124,7 +124,8 @@ function StudentHomePage() {
                 className="w-full h-auto rounded-lg shadow-lg " 
                 alt="online tutorials banner"
             />
-            </div>
+            </div> */}
+            <Hero/>
         </section>
         <section className="bg-gray-100 py-8 px-4 lg:px-8 overflow-hidden">
             <h2 className="text-2xl text-center font-bold mb-6">Categories</h2>
@@ -138,35 +139,30 @@ function StudentHomePage() {
 
         <section className="py-12 px-4 lg:px-8">
             <h2 className="text-2xl font-bold mb-6 text-center">Featured Courses</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {
-                    coursesList && coursesList.length > 0 ?
-                    coursesList.map(course => 
-                      <Card>
-                        <CardContent className="mt-2" onClick={() => handleCourseNavigate(course._id)}>
-                            <img 
-                                src={course.image} 
-                                alt={course.title}
-                                width={300}
-                                height={150}
-                                className="w-full h-40 object-cover rounded-lg"
-                                 />
-                            <h3 className="text-lg font-bold mt-2">{course.title}</h3>
-                            <p className="text-sm text-gray-600">By {course.InstructorName}</p>
-                            <p className="text-md text-gray-600">{course.description}</p>
-                            
-                        </CardContent>
-                        <CardFooter>
-                          <div>
-                              <p className="font-bold text-16px">R{course?.pricing.toFixed(2)}</p>
-                              <AddToCart courseId={course?._id}/>
-                          </div>
-                        </CardFooter>
-                      </Card>
-                        
-                ): <h1>No courses found</h1>
-                }
+            <Carousel
+              plugins={[
+                Autoplay({
+                  delay : 4000,
+                })
+              ]}
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full max-w-6xl mx-auto"
+            >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {coursesList.map((course) => (
+                <CarouselItem key={course._id} className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 lg:basis-1/4">
+                  <CourseCard {...course} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="hidden lg:flex">
+              <CarouselPrevious />
+              <CarouselNext />
             </div>
+          </Carousel>               
         </section>
     </div>  );
 }

@@ -4,6 +4,11 @@ import { Navigate, useLocation } from "react-router-dom";
 function RouteGuard({authenticated, user, element}){
     const location = useLocation();
 
+    // Allow access to home page without authentication
+    if (!authenticated && location.pathname === '/home') {
+        return <Fragment>{element}</Fragment>;
+    }
+
     // Redirect unauthenticated users to login
     if(!authenticated && !location.pathname.includes('/auth')){
         return <Navigate to='/auth' />

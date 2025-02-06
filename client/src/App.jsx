@@ -19,6 +19,7 @@ function App() {
   const { auth } = useContext(AuthContext);
 
   return (
+
     <Routes>
       <Route
         path="/auth"
@@ -60,6 +61,14 @@ function App() {
           />
         }
       />
+
+      {/* Public home route */}
+      <Route path="/" element={<StudentViewCommonLayout />}>
+        <Route path="" element={<StudentHomePage />} />
+        <Route path="home" element={<StudentHomePage />} />
+      </Route>
+      
+      {/* Protected Student Routes */}
       <Route
         path="/"
         element={
@@ -70,8 +79,6 @@ function App() {
           />
         }
       >
-        <Route path="" element={<StudentHomePage />} />
-        <Route path="home" element={<StudentHomePage />} />
         <Route path="/courses" element={<StudentViewCoursesPage />} />
         <Route path="/course/details/:id/:studentId" element={<StudentCourseDetails />} />
         <Route path="/payment-return" element={<PaymentReturnPage />} />        

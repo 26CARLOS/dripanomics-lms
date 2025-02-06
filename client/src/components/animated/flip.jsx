@@ -12,7 +12,7 @@ export default function Flip() {
       height: 0,
       innerHeight: 0,
       transform: 'perspective(600px) rotateX(0deg)',
-      color: '#4B5563',
+      color: '#FFFFFF',
     },
     enter: [
       { opacity: 1, height: 85, innerHeight: 80 },
@@ -20,7 +20,7 @@ export default function Flip() {
       { transform: 'perspective(600px) rotateX(0deg)' },
     ],
     leave: [{ color: '#E0AA3E' }, { innerHeight: 0 }, { opacity: 0, height: 0 }],
-    update: { color: '#374151' },
+    update: { color: '#FFFFFF' },
   })
 
   const reset = useCallback(() => {
