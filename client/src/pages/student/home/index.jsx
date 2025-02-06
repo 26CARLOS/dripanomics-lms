@@ -14,8 +14,7 @@ import AddToCart from "@/components/cart/add-to-cart"
 import CourseCard from "@/components/student-view/course-card";
 import { Carousel, CarouselItem, CarouselContent, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Hero } from "@/components/student-view/hero";
-import Autoplay from "embla-carousel-autoplay"
-
+import Autoplay from "embla-carousel-autoplay";
 function CategoryTrack({ categories, reverse }) {
     const containerRef = useRef(null);
   
