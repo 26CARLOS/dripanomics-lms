@@ -24,7 +24,8 @@ import { PlayCircle,Lock,Globe } from 'lucide-react';
 import VideoPlayer from '@/components/video-player';
 import {checkCoursePurchaseInfoService} from '@/services'
 import AddToCart from '@/components/cart/add-to-cart';
- 
+import { useNavigate } from 'react-router-dom'; 
+
 function SudentCourseDetials () {
 
     const {
@@ -41,6 +42,7 @@ function SudentCourseDetials () {
     const [displayCurrentFreePreview, setDisplayCurrentFreePreview] = useState(null);
     const [showFreePreviewDialog, setShowFreePreviewDialog] = useState(false);
     const [aprovalUrl, setAprovalUrl] = useState('');
+    const navigate = useNavigate();
 
     const {id} = useParams();
     
@@ -48,6 +50,13 @@ function SudentCourseDetials () {
 
     async function fetchStudentCourseDetails(courseId ) {
 
+        const checkCoursePurchaseInfoResponse = await checkCoursePurchaseInfoService(courseId, auth?.user?._id);
+        console.log('checkCoursePurchaseInfoResponse', checkCoursePurchaseInfoResponse);
+        
+        if(checkCoursePurchaseInfoResponse?.success && checkCoursePurchaseInfoResponse?.data) {
+          navigate(`/course-progress/${courseId}`);
+          return;
+        }
         const response = await fetchStudentCourseDetailsService(courseId);
         console.log('response', response);
 
@@ -68,11 +77,11 @@ function SudentCourseDetials () {
         setShowFreePreviewDialog(true);
     }
 
-    // useEffect(()=>{
-    //     if(displayCurrentFreePreview!== null){
-    //         setShowFreePreviewDialog(true);
-    //     }
-    // },[displayCurrentFreePreview])
+    useEffect(()=>{
+        if(displayCurrentFreePreview!== null){
+            setShowFreePreviewDialog(true);
+        }
+    },[displayCurrentFreePreview])
 
     useEffect(() => {
         if(currentCourseId) {

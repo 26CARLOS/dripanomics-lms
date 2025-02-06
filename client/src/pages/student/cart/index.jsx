@@ -9,7 +9,35 @@ import BackButton from '@/components/student-view/back-button';
 function CartPage() {
   const { auth } = useContext(AuthContext);
   const {cartCount, setCartCount} = useContext(StudentContext);
+  const [amount, setAmount] = useState(0);
+  const [discounted, setDiscounted] = useState(false);
   const [cart, setCart] = useState(null);
+
+
+  useEffect(() => {
+    if (cart) {
+      if (cartCount >= 2) {
+        setDiscounted(true);
+        switch(cartCount) {
+          case 2: 
+            setAmount(450);
+            break;
+          case 3: 
+            setAmount(565);
+            break;
+          case 4: 
+            setAmount(700);
+            break;
+          default: 
+            setAmount(Number(cart.total));
+            break;
+        }
+      } else {
+        setDiscounted(false);
+        setAmount(Number(cart.total));
+      }
+    }
+  }, [cart, cartCount]);
 
   async function fetchCart() {
     try {
@@ -18,11 +46,13 @@ function CartPage() {
         console.log(response)
         setCart(response.data);
         setCartCount(response.data.items.length);
+        
       }
     } catch (error) {
       console.error('Error fetching cart:', error);
     }
   }
+
 
   async function handleRemoveFromCart(courseId) {
     try {
@@ -42,7 +72,7 @@ function CartPage() {
         userName: auth?.user?.userName,
         userEmail: auth?.user?.userEmail,
         cartItems: cart.items,
-        total:Number( cart.total.toFixed(2))
+        total:Number( amount)
       };
 
       const response = await createCartPaymentService(paymentPayload);
@@ -96,7 +126,17 @@ function CartPage() {
           </div>
           <div className="mt-4 flex justify-between items-center">
             <div className="text-xl font-bold">
-              Total: R{cart.total.toFixed(2)}
+              Total: 
+              {
+                discounted ? 
+                 <div className="space-x-4">
+                  <p className="line-through">R{cart.total.toFixed(2)}</p> 
+                  <span>R{Number(amount).toFixed(2)}</span>
+                </div>
+                :
+                <span>R{amount.toFixed(2)}</span>
+              }
+              
             </div>
             <Button onClick={handleCheckout}>
               Proceed to Checkout

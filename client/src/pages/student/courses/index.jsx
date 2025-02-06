@@ -88,7 +88,7 @@ function StudentViewCoursesPage(){
           if (response?.data) {
             navigate(`/course-progress/${getCurrentCourseId}`);
           } else {
-            navigate(`/course/details/${getCurrentCourseId}/${auth?.user?._id}`);
+            navigate(`/course/details/${getCurrentCourseId}`);
           }
         }
       }
@@ -192,11 +192,11 @@ function StudentViewCoursesPage(){
                       />
                     </div>
                     <div className="flex-1">
-                      <CardTitle className="text-xl mb-2">
+                      <CardTitle className="text-md mb-2 line-clamp-2 h-14">
                         {courseItem?.title}
                       </CardTitle>
                       <p className="text-sm text-gray-600 mb-1">
-                        Created By{" "}
+                        By{" "}
                         <span className="font-bold">
                           {courseItem?.InstructorName}
                         </span>

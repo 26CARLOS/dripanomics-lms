@@ -80,7 +80,7 @@ function App() {
         }
       >
         <Route path="/courses" element={<StudentViewCoursesPage />} />
-        <Route path="/course/details/:id/:studentId" element={<StudentCourseDetails />} />
+        <Route path="/course/details/:id" element={<StudentCourseDetails />} />
         <Route path="/payment-return" element={<PaymentReturnPage />} />        
         <Route path="/payment-cancel" element={<PaymentCancelPage />} />
         <Route path="/my-courses" element={<StudentCoursesPage />} />

@@ -9,20 +9,26 @@ export default function StudentProvider({children}) {
     const [currentCourseId, setCurrentCourseId] = useState(null);
     const [purchasedCoursesList, setPurchasedCoursesList] = useState([]);
     const [cartCount, setCartCount] = useState(0);
+    const [studentCurrentCourseProgress, setStudentCurrentCourseProgress] =useState({});
+
+    const value={coursesList, 
+        setCoursesList, 
+        loading, 
+        setLoading, 
+        studentViewCourseDetials, 
+        setStudentViewCourseDetials, 
+        currentCourseId, 
+        setCurrentCourseId,
+        purchasedCoursesList, 
+        setPurchasedCoursesList,
+        cartCount, 
+        setCartCount,
+        studentCurrentCourseProgress, 
+        setStudentCurrentCourseProgress
+    }
+
     return (
-        <StudentContext.Provider value={{coursesList, 
-            setCoursesList, 
-            loading, 
-            setLoading, 
-            studentViewCourseDetials, 
-            setStudentViewCourseDetials, 
-            currentCourseId, 
-            setCurrentCourseId,
-            purchasedCoursesList, 
-            setPurchasedCoursesList,
-            cartCount, 
-            setCartCount
-        }}>
+        <StudentContext.Provider value={value}>
             {children}
         </StudentContext.Provider>
     )

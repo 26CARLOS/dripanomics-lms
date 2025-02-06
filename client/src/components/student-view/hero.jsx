@@ -28,7 +28,10 @@ export function Hero() {
             Explore Courses
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
-          <Button variant="outline" size="lg" className="bg-transparent text-white border-white hover:bg-white/10">
+          <Button variant="outline" size="lg" 
+          className="bg-transparent text-white border-white hover:bg-white/10"
+          onClick ={()=>navigate("www.dripanomicstutorials.com")}
+          >
             Learn More
           </Button>
         </div>

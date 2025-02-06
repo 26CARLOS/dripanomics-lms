@@ -91,7 +91,7 @@ function StudentHomePage() {
               if (response?.data) {
                return navigate(`/course-progress/${getCurrentCourseId}`);
               } else {
-                return navigate(`/course/details/${getCurrentCourseId}/${auth?.user?._id}`);
+                return navigate(`/course/details/${getCurrentCourseId}`);
               }
             }
           }

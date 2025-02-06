@@ -19,12 +19,12 @@ function StudentViewCommonHeader() {
   }
 
   return (
-    <header className="flex items-center justify-between p-4 border-b w-full z-10 bg-white fixed" >
+    <header className="flex items-center justify-between p-4 border-b w-full z-10 bg-white absolute" >
       <div className="flex items-center">
         <Link to="home" className="flex items-center space-x-2">
           <GraduationCap className="h-8 w-8 mr-2 hover:text-gray-800" />
           <span className="font-extrabold text-lg md:text-xl">Dripanomics Tutorials</span>
-          {auth?.user?.role !== 'user'&&(<Badge>Admin</Badge>)}
+          {auth?.user?.role === 'admin'&&(<Badge>Admin</Badge>)}
         </Link>
       </div>
 
@@ -45,14 +45,20 @@ function StudentViewCommonHeader() {
         )}
 
         <CartIcon className="cursor-pointer"/>
+        {
+          auth.authenticated ?
+            <Button onClick={handleLogOut} className="text-base font-medium">
+            Sign Out
+            <LogOut className="ml-2 h-4 w-4" />
+            </Button> :
+            <Button>
+              <Link to="/auth" className="text-base font-medium">Get Started</Link>
+            </Button>
+        }
         
-        <Button onClick={handleLogOut} className="text-base font-medium">
-          Sign Out
-          <LogOut className="ml-2 h-4 w-4" />
-        </Button>
       </nav>
 
-      <MobileMenu onLogOut={handleLogOut} isAdmin={auth?.user?.role === 'admin'} />
+      <MobileMenu onLogOut={handleLogOut} isAdmin={auth?.user?.role === 'admin' } authenticated={auth.authenticated}/>
     </header>
   )
 }

@@ -275,55 +275,43 @@ async function processPayment(pfData) {
             return;
         }
 
-        console.log(order.cartItems);
+        if (paymentStatus === "COMPLETE") {
+            // Update order status
+            order.paymentStatus = "paid";
+            order.orderStatus = "confirmed";
+            await order.save();
 
-        // if (paymentStatus === "COMPLETE") {
-        //     order.paymentStatus = "paid";
-        //     order.orderStatus = "confirmed";
-        //     await order.save();
+            // Find or create StudentCourses document
+            let studentCourses = await StudentCourses.findOne({ userId: order.userId });
+            if (!studentCourses) {
+                studentCourses = new StudentCourses({
+                    userId: order.userId,
+                    courses: []
+                });
+            }
 
-        //     // Find or create StudentCourses document
-        //     let studentCourses = await StudentCourses.findOne({ userId: order.userId });
-            
-        //     if (!studentCourses) {
-        //         studentCourses = new StudentCourses({
-        //             userId: order.userId,
-        //             courses: []
-        //         });
-        //     }
+            // Process cart items
+            if (order.cartItems && order.cartItems.length > 0) {
+                for (const item of order.cartItems) {
+                    // Add course to student's courses
+                    studentCourses.courses.push({
+                        courseId: item.courseId,
+                        title: item.title,
+                        instructorId: item.instructorId,
+                        instructorName: item.instructorName,
+                        dateOfPurchase: order.orderDate,
+                        courseImage: item.courseImage
+                    });
+                }
+                await studentCourses.save();
+            }
 
-        //     // Add cart items to student courses
-        //     if (order.cartItems && order.cartItems.length > 0) {
-        //         for (const item of order.cartItems) {
-        //             studentCourses.courses.push({
-        //                 courseId: item.courseId,
-        //                 courseTitle: item.courseTitle, // Make sure to use courseTitle here
-        //                 instructorId: item.instructorId,
-        //                 instructorName: item.instructorName,
-        //                 dateOfPurchase: order.orderDate,
-        //                 courseImage: item.courseImage
-        //             });
-
-        //             // Update course enrollment
-        //             const course = await Course.findById(item.courseId);
-        //             if (course) {
-        //                 course.students.push({
-        //                     studentId: order.userId,
-        //                     studentName: order.userName,
-        //                     dateOfPurchase: order.orderDate
-        //                 });
-        //                 await course.save();
-        //             }
-        //         }
-        //         await studentCourses.save();
-        //     }
-
-        //     // Clear the cart after successful payment
-        //     await Cart.findOneAndUpdate(
-        //         { userId: order.userId },
-        //         { $set: { items: [], total: 0 } }
-        //     );
-        // }
+            // Clear the cart
+            await Cart.findOneAndUpdate(
+                { userId: order.userId },
+                { $set: { items: [], total: 0 } }
+            );
+        }
     } catch (error) {
         console.error('Payment processing error:', error);
     }

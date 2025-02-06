@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import {ArrowLeft} from 'lucide-react'
+import {ChevronLeft} from 'lucide-react'
 import { Button } from '../ui/button';
 
 const BackButton = () => {
@@ -13,9 +13,9 @@ const BackButton = () => {
     return (
         <Button
             onClick={handleGoBack}
-            className="text-sm font-medium rounded-md"
+            className="text-sm font-medium rounded-md mr-2 bg-gray-600"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" />
+          <ChevronLeft className="h-4 w-4" />
         </Button>
     );
 };

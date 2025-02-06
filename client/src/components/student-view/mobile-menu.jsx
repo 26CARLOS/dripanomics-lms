@@ -10,13 +10,13 @@ import CartIcon from "@/components/cart/cart-icon"
  * @param {Object} props
  * @param {Function} props.onLogOut - Function to handle logout
  */
-function MobileMenu({ onLogOut, isAdmin }) {
+function MobileMenu({ onLogOut, isAdmin, authenticated }) {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
   return (
-    <div className="md:hidden flex fex-row justify-center items-center space-x-4">
+    <div className="md:hidden flex fex-row justify-center items-center space-x-4 left-4 overflow-x-hidden h-[42px]">
       <CartIcon/>
       <Button variant="ghost" onClick={toggleMenu}>
         {isOpen ? <X /> : <Menu className='w-8 h-8'/>}
@@ -44,7 +44,10 @@ function MobileMenu({ onLogOut, isAdmin }) {
           </Link>
         )}
 
-        <Button
+        {
+
+          authenticated ? 
+          <Button
           onClick={() => {
             onLogOut()
             toggleMenu()
@@ -52,7 +55,14 @@ function MobileMenu({ onLogOut, isAdmin }) {
           className="w-full"
         >
           Sign Out
+        </Button> :
+        <Button>
+          <Link to="/auth" className="w-full">Get Started</Link>
         </Button>
+
+        }
+
+        
       </div>
     </div>
   )

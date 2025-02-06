@@ -21,7 +21,7 @@ function CourseCard({ title, instructorName, image, pricing, _id }) {
       if (response?.data) {
         navigate(`/course-progress/${getCurrentCourseId}`);
       } else {
-        navigate(`/course/details/${getCurrentCourseId}/${auth?.user?._id}`);
+        navigate(`/course/details/${getCurrentCourseId}`);
       }
     }
   }
