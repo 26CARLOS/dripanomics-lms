@@ -8,7 +8,7 @@ require('dotenv').config();
 async function clearStudentData() {
     try {
         // Connect to MongoDB
-        await mongoose.connect(process.env.MONGO_URI);
+        await mongoose.connect("mongodb+srv://carlosjuma821:wpWA5ykyyeZoKMAb@cluster0.ovw1j.mongodb.net/");
         console.log('Connected to MongoDB');
 
         // Delete all student courses

@@ -24,6 +24,7 @@ import { PlayCircle,Lock,Globe } from 'lucide-react';
 import VideoPlayer from '@/components/video-player';
 import {checkCoursePurchaseInfoService} from '@/services'
 import AddToCart from '@/components/cart/add-to-cart';
+import BuyNow from '@/components/cart/buy-now';
 import { useNavigate } from 'react-router-dom'; 
 
 function SudentCourseDetials () {
@@ -174,6 +175,10 @@ function SudentCourseDetials () {
             console.error('Error initiating PayFast payment:', response?.message);
         }
     }
+
+    async function handleBuyNow(){
+
+    }
       return (
         <div className="container mx-auto px-4 py-8 flex flex-col gap-8 overflow-hidden">
           <div className="bg-gray-900 text-white p-8 rounded-lg mb-4">
@@ -261,9 +266,6 @@ function SudentCourseDetials () {
               </div>
             </CardContent>
             <CardFooter className="space-x-2">
-                <Button onClick={handleCreatePayment} className="w-full">
-                  Buy Now
-                </Button>
                 <AddToCart courseId={studentViewCourseDetials?._id} />
             </CardFooter>
           </Card>

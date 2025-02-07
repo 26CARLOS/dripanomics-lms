@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, BookOpen, Users, GraduationCap } from "lucide-react"
 import Flip from "../animated/flip"
 import studentsLearning from "@/assets/students-learning.jpg"
-import { useNavigate } from "react-router-dom"
+import { useNavigate,Link } from "react-router-dom"
 
 export function Hero() {
 
@@ -15,6 +15,7 @@ export function Hero() {
           src={studentsLearning}
           alt="Students learning"
           className="h-full w-full object-cover opacity-20"
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-bl from-gray-500 to-primary-foreground mix-blend-multiply" />
       </div>
@@ -28,12 +29,14 @@ export function Hero() {
             Explore Courses
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
-          <Button variant="outline" size="lg" 
-          className="bg-transparent text-white border-white hover:bg-white/10"
-          onClick ={()=>navigate("www.dripanomicstutorials.com")}
-          >
-            Learn More
-          </Button>
+          <Link to="https://www.dripanomicstutorials.com">
+            <Button variant="outline" size="lg" 
+            className="bg-transparent text-white border-white hover:bg-white/10"
+            >
+              Learn More
+            </Button>
+          </Link>
+          
         </div>
         <div className="mt-16 grid grid-cols-1 gap-y-8 sm:grid-cols-3 sm:gap-x-8 md:flex md:justify-center md:gap-x-8">
           {[

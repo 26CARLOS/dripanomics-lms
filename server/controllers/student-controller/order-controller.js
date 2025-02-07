@@ -25,9 +25,18 @@ const createPayFastCartOrder = async (req, res) => {
             paymentMethod: "payfast",
             paymentStatus: "pending",
             orderDate: new Date(),
-            cartItems,
+            cartItems: cartItems.map(item => ({ // Ensure title is included
+                courseId: item.courseId,
+                courseTitle: item.title,
+                courseImage: item.courseImage,
+                coursePricing: item.price,
+                instructorId: item.instructorId,
+                instructorName: item.instructorName
+            })),
             total,
         });
+
+        console.log(cartItems)
 
         await newCartOrder.save();
 
@@ -35,7 +44,7 @@ const createPayFastCartOrder = async (req, res) => {
         const paymentData = {
             merchant_id: process.env.PAYFAST_MERCHANT_ID,
             merchant_key: process.env.PAYFAST_MERCHANT_KEY,
-            return_url: process.env.PAYFAST_RETURN_URL,
+            return_url: `${process.env.PAYFAST_RETURN_URL}?order_id=${newCartOrder._id}`,
             cancel_url: process.env.PAYFAST_CANCEL_URL,
             notify_url: process.env.PAYFAST_NOTIFY_URL.trim(),
             name_first: userName.split(' ')[0] || 'Customer',
@@ -75,85 +84,85 @@ const createPayFastCartOrder = async (req, res) => {
 
 
 let globalAmount = 0;
-// Create PayFast Order
-const createPayFastOrder = async (req, res) => {
-    try {
-        const {
-            userId,
-            userName,
-            userEmail,
-            instructorId,
-            instructorName,
-            courseImage,
-            courseTitle,
-            courseId,
-            coursePricing,
-        } = req.body;
+// // Create PayFast Order
+// const createPayFastOrder = async (req, res) => {
+//     try {
+//         const {
+//             userId,
+//             userName,
+//             userEmail,
+//             instructorId,
+//             instructorName,
+//             courseImage,
+//             courseTitle,
+//             courseId,
+//             coursePricing,
+//         } = req.body;
 
 
-        // Create a new order in the database
-        const newCourseOrder = new Order({
-            userId,
-            userName,
-            userEmail,
-            orderStatus: "pending",
-            paymentMethod: "payfast",
-            paymentStatus: "pending",
-            orderDate: new Date(),
-            instructorId,
-            instructorName,
-            courseImage,
-            courseTitle,
-            courseId,
-            coursePricing,
-        });
+//         // Create a new order in the database
+//         const newCourseOrder = new Order({
+//             userId,
+//             userName,
+//             userEmail,
+//             orderStatus: "pending",
+//             paymentMethod: "payfast",
+//             paymentStatus: "pending",
+//             orderDate: new Date(),
+//             instructorId,
+//             instructorName,
+//             courseImage,
+//             courseTitle,
+//             courseId,
+//             coursePricing,
+//         });
 
-        await newCourseOrder.save();
+//         await newCourseOrder.save();
 
-        // Prepare PayFast payment data
-        const paymentData = {
-            merchant_id: process.env.PAYFAST_MERCHANT_ID,
-            merchant_key: process.env.PAYFAST_MERCHANT_KEY,
-            return_url: process.env.PAYFAST_RETURN_URL,
-            cancel_url: process.env.PAYFAST_CANCEL_URL,
-            notify_url: process.env.PAYFAST_NOTIFY_URL.trim(),
-            name_first: userName.split(' ')[0] || 'Customer',
-            name_last: userName.split(' ')[1] || 'User',
-            email_address: userEmail,
-            amount: Number(coursePricing).toFixed(2),
-            item_name: `Course: ${courseTitle}`,
-            item_description: 'Online Course', 
-            custom_str1: newCourseOrder._id.toString()
-        };
+//         // Prepare PayFast payment data
+//         const paymentData = {
+//             merchant_id: process.env.PAYFAST_MERCHANT_ID,
+//             merchant_key: process.env.PAYFAST_MERCHANT_KEY,
+//             return_url: process.env.PAYFAST_RETURN_URL,
+//             cancel_url: process.env.PAYFAST_CANCEL_URL,
+//             notify_url: process.env.PAYFAST_NOTIFY_URL.trim(),
+//             name_first: userName.split(' ')[0] || 'Customer',
+//             name_last: userName.split(' ')[1] || 'User',
+//             email_address: userEmail,
+//             amount: Number(coursePricing).toFixed(2),
+//             item_name: `Course: ${courseTitle}`,
+//             item_description: 'Online Course', 
+//             custom_str1: newCourseOrder._id.toString()
+//         };
 
-        globalAmount = paymentData.amount;
+//         globalAmount = paymentData.amount;
 
 
-        console.log(paymentData)
+//         console.log(paymentData)
 
-        // Generate signature
-        const signature = generateSignature(paymentData, process.env.PAYFAST_PASSPHRASE);
-        paymentData.signature = signature;
-        console.log(signature);
-        // Create PayFast URL
-        const payfastUrl = `${process.env.PAYFAST_URL}?${new URLSearchParams(paymentData).toString()}`;
+//         // Generate signature
+//         const signature = generateSignature(paymentData, process.env.PAYFAST_PASSPHRASE);
+//         paymentData.signature = signature;
+//         console.log(signature);
+//         // Create PayFast URL
+//         const payfastUrl = `${process.env.PAYFAST_URL}?${new URLSearchParams(paymentData).toString()}`;
 
-        res.status(201).json({
-            success: true,
-            message: "PayFast payment initiated successfully!",
-            data: {
-                payfastUrl,
-                order_id: newCourseOrder._id,
-            },
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Error initiating PayFast payment",
-        });
-    }
-};
+//         res.status(201).json({
+//             success: true,
+//             message: "PayFast payment initiated successfully!",
+//             data: {
+//                 payfastUrl,
+//                 order_id: newCourseOrder._id,
+//             },
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({
+//             success: false,
+//             message: "Error initiating PayFast payment",
+//         });
+//     }
+// };
 
 const pfValidServerConfirmation = async (pfHost, pfParamString) => {
     const result = await axios.post(`https://${pfHost}/eng/query/validate`, pfParamString)
@@ -292,16 +301,20 @@ async function processPayment(pfData) {
 
             // Process cart items
             if (order.cartItems && order.cartItems.length > 0) {
+                console.log(order.cartItems, "THESE ARE THE CART ITEMS")
                 for (const item of order.cartItems) {
                     // Add course to student's courses
                     studentCourses.courses.push({
                         courseId: item.courseId,
-                        title: item.title,
+                        courseTitle: item.courseTitle,
                         instructorId: item.instructorId,
                         instructorName: item.instructorName,
                         dateOfPurchase: order.orderDate,
                         courseImage: item.courseImage
                     });
+
+                    console.log(item.courseTitle, 'added to student courses');
+                    
                 }
                 await studentCourses.save();
             }
@@ -319,7 +332,6 @@ async function processPayment(pfData) {
 
 
 module.exports = {
-    createPayFastOrder,
     handlePayFastNotification,
     createPayFastCartOrder
 };

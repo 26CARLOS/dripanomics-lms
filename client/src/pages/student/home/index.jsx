@@ -15,6 +15,10 @@ import CourseCard from "@/components/student-view/course-card";
 import { Carousel, CarouselItem, CarouselContent, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Hero } from "@/components/student-view/hero";
 import Autoplay from "embla-carousel-autoplay";
+import SaleBanner from "@/components/student-view/sale-banner"
+
+
+
 function CategoryTrack({ categories, reverse }) {
     const containerRef = useRef(null);
   
@@ -126,14 +130,13 @@ function StudentHomePage() {
             </div> */}
             <Hero/>
         </section>
+        <SaleBanner/>
         <section className="bg-gray-100 py-8 px-4 lg:px-8 overflow-hidden">
             <h2 className="text-2xl text-center font-bold mb-6">Categories</h2>
             
             <div className="relative overflow-hidden py-4">
                 <CategoryTrack categories={[...courseCategories, ...courseCategories]} reverse={false} />
             </div>
-            
-
         </section>
 
         <section className="py-12 px-4 lg:px-8">

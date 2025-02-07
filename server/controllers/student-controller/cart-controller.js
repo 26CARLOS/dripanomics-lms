@@ -29,6 +29,7 @@ const addToCart = async (req, res) => {
             });
         }
 
+
         // Add course to cart
         cart.items.push({
             courseId: course._id,
@@ -37,6 +38,12 @@ const addToCart = async (req, res) => {
             instructorId: course.instructorId,
             instructorName: course.InstructorName,
             courseImage: course.image
+        });
+
+        console.log("Adding to cart:", {
+            courseId: course._id,
+            title: course.title,
+            instructorName: course.InstructorName
         });
 
         // Update total

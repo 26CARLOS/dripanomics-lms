@@ -71,7 +71,14 @@ function CartPage() {
         userId: auth?.user?._id,
         userName: auth?.user?.userName,
         userEmail: auth?.user?.userEmail,
-        cartItems: cart.items,
+        cartItems: cart.items.map(item => ({ // Map to include all item details
+          courseId: item.courseId,
+          title: item.title,
+          price: item.price,
+          instructorId: item.instructorId,
+          instructorName: item.instructorName,
+          courseImage: item.courseImage
+      })),
         total:Number( amount)
       };
 

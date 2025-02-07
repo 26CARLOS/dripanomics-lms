@@ -16,8 +16,6 @@ function StudentCoursesPage() {
     async function fetchStudentPurchasedCourses(){
         try{
             const response = await fetchStudentPurchasedCoursesService(auth?.user._id);
-            console.log(response);
-
             if(response.success){
                 setPurchasedCoursesList(response?.data);
             }
@@ -29,6 +27,8 @@ function StudentCoursesPage() {
     useEffect(()=>{
         fetchStudentPurchasedCourses()
     },[])
+
+    console.log(purchasedCoursesList)
 
 
 
@@ -46,7 +46,7 @@ function StudentCoursesPage() {
                             
                                 className='w-70 h-60 object-fit'
                                 />
-                                <h3 className='text-lg font-bold mb-1'>{course.title}</h3>
+                                <h3 className='text-lg font-bold mb-1'>{course.courseTitle}</h3>
                                 <p className='text-sm text-gray-700 mb-2'> by {course.instructorName}</p>
                                 <CardFooter className="mt-4">
                                     <Button onClick={()=> navigate(`/course-progress/${course?.courseId}`)} className="flex-1">
