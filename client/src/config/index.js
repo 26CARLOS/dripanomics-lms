@@ -161,7 +161,7 @@ export const courseCourseLandingPageFormControls = [
         placeholder: 'Enter welcome message',
         componentType: 'textarea'
     },
-]
+];
 
 export const courseCurriculumInitialFormData= [
     {

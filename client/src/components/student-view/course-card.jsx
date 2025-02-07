@@ -37,7 +37,7 @@ function CourseCard({ title, instructorName, image, pricing, _id }) {
           className="w-full h-40 object-fit rounded-lg"
               />
         <CardContent className="p-2 sm:p-4 flex-grow" >
-          <CardTitle className="text-sm sm:text-lg line-clamp-2 mb-1 sm:mb-2">{title}</CardTitle>
+          <CardTitle className="text-sm sm:text-sm line-clamp-1 mb-1 sm:mb-2">{title}</CardTitle>
           <p className="text-xs sm:text-sm text-muted-foreground">{instructorName}</p>
         </CardContent>
       </div>

@@ -19,7 +19,7 @@ function StudentViewCommonHeader() {
   }
 
   return (
-    <header className="flex items-center justify-between p-4 border-b w-full z-10 bg-white absolute" >
+    <header className="flex items-center justify-between p-4 border-b w-full z-10 bg-white " >
       <div className="flex items-center">
         <Link to="home" className="flex items-center space-x-2">
           <GraduationCap className="h-8 w-8 mr-2 hover:text-gray-800" />

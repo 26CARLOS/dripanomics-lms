@@ -12,6 +12,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import {AuthContext} from "@/context/auth-context";
+import CourseCard from "@/components/student-view/course-card";
 
 
 function createSearchParams(filterParams) {
@@ -179,41 +180,42 @@ function StudentViewCoursesPage(){
                 
                     {coursesList && coursesList.length > 0 ? (
               coursesList.map((courseItem) => (
-                <Card
-                  onClick={()=>handleCourseNavigate(courseItem?._id)}
-                  className="cursor-pointer"
-                  key={courseItem?._id}
-                >
-                  <CardContent className="flex gap-4 p-4">
-                    <div className="w-48 h-32 flex-shrink-0">
-                      <img
-                        src={courseItem?.image}
-                        className="w-ful h-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-md mb-2 line-clamp-2 h-14">
-                        {courseItem?.title}
-                      </CardTitle>
-                      <p className="text-sm text-gray-600 mb-1">
-                        By{" "}
-                        <span className="font-bold">
-                          {courseItem?.InstructorName}
-                        </span>
-                      </p>
-                      <p className="text-[16px] text-gray-600 mt-3 mb-2">
-                        {`${courseItem?.curriculum?.length} ${
-                          courseItem?.curriculum?.length <= 1
-                            ? "Lecture"
-                            : "Lectures"
-                        } - ${courseItem?.level.toUpperCase()} Level`}
-                      </p>
-                      <p className="font-bold text-lg">
-                        R{courseItem?.pricing.toFixed(2)}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
+                // <Card
+                //   onClick={()=>handleCourseNavigate(courseItem?._id)}
+                //   className="cursor-pointer"
+                //   key={courseItem?._id}
+                // >
+                //   <CardContent className="flex gap-4 p-4">
+                //     <div className="w-48 h-32 flex-shrink-0">
+                //       <img
+                //         src={courseItem?.image}
+                //         className="w-ful h-full object-cover"
+                //       />
+                //     </div>
+                //     <div className="flex-1 overflow-hidden">
+                //       <CardTitle className=" sm:text-xs text-md mb-2 line-clamp-2 h-14 overflow-hidden">
+                //         {courseItem?.title}
+                //       </CardTitle>
+                //       <p className="text-sm text-gray-600 mb-1">
+                //         By{" "}
+                //         <span className="font-bold line-clamp-2">
+                //           {courseItem?.InstructorName}
+                //         </span>
+                //       </p>
+                //       <p className="text-[16px] text-gray-600 mt-3 mb-2">
+                //         {`${courseItem?.curriculum?.length} ${
+                //           courseItem?.curriculum?.length <= 1
+                //             ? "Lecture"
+                //             : "Lectures"
+                //         } - ${courseItem?.level.toUpperCase()} Level`}
+                //       </p>
+                //       <p className="font-bold text-lg">
+                //         R{courseItem?.pricing.toFixed(2)}
+                //       </p>
+                //     </div>
+                //   </CardContent>
+                // </Card>
+                <CourseCard {...courseItem} />
               ))
             ) : loading ?(<Skeleton/>)
             :(

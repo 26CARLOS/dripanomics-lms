@@ -175,9 +175,9 @@ function SudentCourseDetials () {
         }
     }
       return (
-        <div className="container mx-auto px-4 py-8 flex flex-col gap-8">
+        <div className="container mx-auto px-4 py-8 flex flex-col gap-8 overflow-hidden">
           <div className="bg-gray-900 text-white p-8 rounded-lg mb-4">
-          <div className='flex items-center gap-4 justify-between'>
+          <div className='flex items-center gap-4 justify-between sm:flex-col'>
             <h1 className="text-3xl font-bold mb-4">
               {studentViewCourseDetials?.title}
             </h1>
