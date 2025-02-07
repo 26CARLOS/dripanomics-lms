@@ -23,6 +23,9 @@ import { Check, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import { useNavigate, useParams } from "react-router-dom";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import LessonList from "@/components/student-view/lesson-list"
+import CourseOverview from "@/components/student-view/course-overview"
 
 function StudentViewCourseProgressPage() {
   const navigate = useNavigate();
@@ -120,105 +123,62 @@ function StudentViewCourseProgressPage() {
   console.log(currentLecture, "currentLecture");
 
   return (
-    <div className="flex flex-col h-screen bg-[#1c1d1f] text-white">
+    <div className="flex flex-col h-screen bg-white  p-16">
       {showConfetti && <Confetti />}
-      <div className="flex items-center justify-between p-4 bg-[#1c1d1f] border-b border-gray-700">
-        <div className="flex items-center space-x-4 sticky">
-          <Button
+      <div className="flex items-center justify-between p-4 bg-gray-900 border-b border-gray-700 rounded-lg mt-3">
+      <Button
             onClick={() => navigate("/my-courses")}
             className="text-white"
             variant="ghost"
-            size="sm"
-            
-          >
+            size="sm">
             <ChevronLeft className="h-4 w-4 mr-2" />
             Back to My Courses
           </Button>
-          <h1 className="text-lg font-bold hidden md:block">
+        <div className="flex justify-between items-center space-x-4 sticky">
+          <h1 className="text-lg font-bold hidden md:block text-white text-center items-center">
             {studentCurrentCourseProgress?.courseDetails?.title}
           </h1>
         </div>
-        <Button onClick={() => setIsSideBarOpen(!isSideBarOpen)}>
-          {isSideBarOpen ? (
-            <ChevronRight className="h-5 w-5" />
-          ) : (
-            <ChevronLeft className="h-5 w-5" />
-          )}
-        </Button>
       </div>
       <div className="flex flex-1 ">
-        <div
-          className={`flex-1 ${
-            isSideBarOpen ? "mr-[400px]" : ""
-          } transition-all duration-300`}
-        >
-          <VideoPlayer
+        <div className="w-full">
+          <Card className="m-2">
+            <CardContent
+            className="p-4"
+
+            >
+            <VideoPlayer
             width="100%"
             height="500px"
             url={currentLecture?.videoUrl}
             onProgressUpdate={setCurrentLecture}
             progressData={currentLecture}
           />
-          <div className="p-6 bg-[#1c1d1f]">
-            <h2 className="text-2xl font-bold mb-2">{currentLecture?.title}</h2>
-          </div>
+            </CardContent>
+            <CardFooter>
+              <h2 className="text-2xl font-bold mb-2">{currentLecture?.title}</h2>
+            </CardFooter>
+          </Card>
+          <CourseOverview
+            title={studentCurrentCourseProgress?.courseDetails?.title}
+            instructor={studentCurrentCourseProgress?.courseDetails?.InstructorName}
+            progress={
+              (studentCurrentCourseProgress?.progress?.filter(item => item.viewed)?.length /
+              studentCurrentCourseProgress?.courseDetails?.curriculum?.length) * 100 || 0
+            }
+            totalLessons={studentCurrentCourseProgress?.courseDetails?.curriculum?.length}
+            completedLessons={studentCurrentCourseProgress?.progress?.filter(item => item.viewed)?.length || 0}
+          />
         </div>
-        <div
-          className={`fixed top-[64px] right-0 bottom-0 w-[400px] bg-[#1c1d1f] border-l border-gray-700 transition-all duration-300 ${
-            isSideBarOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          <Tabs defaultValue="content" className="h-full flex flex-col">
-            <TabsList className="grid bg-[#1c1d1f] w-full grid-cols-2 p-0 h-14">
-              <TabsTrigger
-                value="content"
-                className=" text-black rounded-none h-full"
-              >
-                Course Content
-              </TabsTrigger>
-              <TabsTrigger
-                value="overview"
-                className=" text-black rounded-none h-full"
-              >
-                Overview
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="content">
-              <ScrollArea className="h-full">
-                <div className="p-4 space-y-4">
-                  {studentCurrentCourseProgress?.courseDetails?.curriculum.map(
-                    (item) => (
-                      <div
-                        className="flex items-center space-x-2 text-sm text-white font-bold cursor-pointer"
-                        key={item._id}
-                        onClick={()=>setCurrentLecture(item)}
-                      >
-                        {studentCurrentCourseProgress?.progress?.find(
-                          (progressItem) => progressItem.lectureId === item._id
-                        )?.viewed ? (
-                          <Check className="h-4 w-4 text-green-500" />
-                        ) : (
-                          <Play className="h-4 w-4 " />
-                        )}
-                        <span>{item?.title}</span>
-                      </div>
-                    )
-                  )}
-                </div>
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="overview" className="flex-1 overflow-hidden">
-              <ScrollArea className="h-full">
-                <div className="p-4">
-                  <h2 className="text-xl font-bold mb-4">About this course</h2>
-                  <p className="text-gray-400">
-                    {studentCurrentCourseProgress?.courseDetails?.description}
-                  </p>
-                </div>
-              </ScrollArea>
-            </TabsContent>
-          </Tabs>
-        </div>
+        <LessonList 
+        lessons={studentCurrentCourseProgress?.courseDetails?.curriculum}
+        progress={studentCurrentCourseProgress?.progress}
+        onLessonClick={(lectureId) => {
+          const lecture = studentCurrentCourseProgress?.courseDetails?.curriculum.find(
+            item => item._id === lectureId
+          );
+          setCurrentLecture(lecture);
+        }}  />
       </div>
       <Dialog open={lockCourse}>
         <DialogContent className="sm:w-[425px]">
@@ -235,7 +195,7 @@ function StudentViewCourseProgressPage() {
           <DialogHeader>
             <DialogTitle>Congratulations!</DialogTitle>
             <DialogDescription className="flex flex-col gap-3">
-              <Label>You have completed the course</Label>
+              <Label>You've watched all the lecture videos.</Label>
               <div className="flex flex-row gap-3">
                 <Button onClick={() => navigate("/student-courses")}>
                   My Courses Page

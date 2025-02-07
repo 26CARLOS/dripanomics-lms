@@ -6,7 +6,13 @@ import { Button } from "../ui/button";
 import {Volume2, VolumeX, Minimize, Maximize} from "lucide-react"
 
 
-function VideoPlayer({width='100%', height='100%', url}) {
+function VideoPlayer({
+    width='100%', 
+    height='100%',
+    url,
+    onProgressUpdate,
+    progressData,
+    }) {
 
     const [playing, setPlaying] = useState(false);
     const [volume, setVolume] = useState(0.5);
@@ -107,7 +113,12 @@ function VideoPlayer({width='100%', height='100%', url}) {
         }
     }
 
-
+    function handleMouseMove(){
+            setShowControls(true)
+            clearTimeout(controlsTimeoutRef.current)
+            controlsTimeoutRef.current = setTimeout(()=>setShowControls(false), 3000)
+        }
+    
     useEffect(() => {
         const handleFullscreenChange = () => {
             setIsFullScreen(!!document.fullscreenElement);
@@ -126,11 +137,16 @@ function VideoPlayer({width='100%', height='100%', url}) {
         };
     }, []);
 
-    function handleMouseMove(){
-        setShowControls(true)
-        clearTimeout(controlsTimeoutRef.current)
-        controlsTimeoutRef.current = setTimeout(()=>setShowControls(false), 3000)
-    }
+    useEffect(() => {
+        if (played === 1) {
+          onProgressUpdate({
+            ...progressData,
+            progressValue: played,
+          });
+        }
+      }, [played]);
+
+    
 
     return ( 
     <div ref={playerContainer}
