@@ -83,6 +83,7 @@ export const courseCategories = [
     { id: "business", label: "Business" },
     { id: "law", label: "Law" },
     { id: "computer-science", label: "Computer Science" },
+    { id: "engineering", label: "Engineering" },
     { id: "economics", label: "Economics" },
     { id: "finance", label: "Finance" },
     { id: "management", label: "Management" },
