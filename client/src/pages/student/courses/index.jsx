@@ -13,6 +13,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import {AuthContext} from "@/context/auth-context";
 import CourseCard from "@/components/student-view/course-card";
+import BackToTop from "@/components/ui/back-to-top";
 
 
 function createSearchParams(filterParams) {
@@ -176,7 +177,7 @@ function StudentViewCoursesPage(){
                         </DropdownMenu>
                         <span className="text-sm text-gray-700 font-bold">{coursesList.length} Results</span>
                     </div>
-                    <div className="space-y-4 ">
+                    <div className="space-y-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 
                     {coursesList && coursesList.length > 0 ? (
               coursesList.map((courseItem) => (
@@ -224,6 +225,7 @@ function StudentViewCoursesPage(){
                     </div>
                 </main>
              </div>
+             <BackToTop/>
         </div>
     )
 }

@@ -1,15 +1,12 @@
-import { ShoppingCart } from "lucide-react"
-import { useContext } from "react"
-import { useNavigate } from "react-router-dom"
-import { StudentContext } from "@/context/student-context"
+import { ShoppingCart } from "lucide-react";
+import { useContext } from "react";
+import { StudentContext } from "@/context/student-context";
 
-export function CartIcon() {
-  const { cartCount } = useContext(StudentContext);
-
-  const navigate = useNavigate();
+function CartIcon() {
+  const { cartCount, toggleMiniCart } = useContext(StudentContext);
  
   return (
-    <div className="relative cursor-pointer" onClick={() => navigate("/cart")}>
+    <div className="relative cursor-pointer" onClick={toggleMiniCart}>
       <ShoppingCart className="w-6 h-6" />
       {cartCount > 0 && (
         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
@@ -17,7 +14,7 @@ export function CartIcon() {
         </span>
       )}
     </div>
-  )
+  );
 }
 
-export default CartIcon;
+export default CartIcon

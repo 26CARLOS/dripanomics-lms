@@ -2,9 +2,16 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 import saleBanner from "@/assets/sale-background.jpg"
+import {useNavigate} from "react-router-dom"
+
 function SaleBanner() {
   const [isVisible, setIsVisible] = useState(true)
-  if (!isVisible) return null
+  const navigate = useNavigate();
+
+  if (!isVisible){ 
+    return null
+}
+
 
   return (
     <div className="relative overflow-hidden mt-2">
@@ -28,6 +35,7 @@ function SaleBanner() {
             <Button
               size="lg"
               className="bg-white text-primary hover:bg-primary-foreground hover:text-primary-foreground"
+              onClick ={() => navigate("/courses")}
             >
               Claim Offer Now
             </Button>

@@ -10,6 +10,8 @@ export default function StudentProvider({children}) {
     const [purchasedCoursesList, setPurchasedCoursesList] = useState([]);
     const [cartCount, setCartCount] = useState(0);
     const [studentCurrentCourseProgress, setStudentCurrentCourseProgress] =useState({});
+    const [isMiniCartOpen, setIsMiniCartOpen] = useState(false);
+    const toggleMiniCart = () => setIsMiniCartOpen(prev => !prev);
 
     const value={coursesList, 
         setCoursesList, 
@@ -24,7 +26,10 @@ export default function StudentProvider({children}) {
         cartCount, 
         setCartCount,
         studentCurrentCourseProgress, 
-        setStudentCurrentCourseProgress
+        setStudentCurrentCourseProgress,
+        toggleMiniCart,
+        isMiniCartOpen, 
+        setIsMiniCartOpen
     }
 
     return (

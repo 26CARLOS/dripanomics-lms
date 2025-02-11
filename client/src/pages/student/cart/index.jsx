@@ -131,13 +131,14 @@ function CartPage() {
               </Card>
             ))}
           </div>
-          <div className="mt-4 flex justify-between items-center">
-            <div className="text-xl font-bold">
-              Total: 
+          <div className="mt-4 flex flex-col justify-between items-center">
+            <div className="text-xl flex flex-row justify-between font-bold">
+              <span className="mr-2">Total:</span>
+               
               {
                 discounted ? 
-                 <div className="space-x-4">
-                  <p className="line-through">R{cart.total.toFixed(2)}</p> 
+                 <div className="space-x-4 flex flex-row">
+                  <p className="line-through text-gray-500 text-sm">R{cart.total.toFixed(2)}</p> 
                   <span>R{Number(amount).toFixed(2)}</span>
                 </div>
                 :

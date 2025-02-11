@@ -16,7 +16,7 @@ import { Carousel, CarouselItem, CarouselContent, CarouselNext, CarouselPrevious
 import { Hero } from "@/components/student-view/hero";
 import Autoplay from "embla-carousel-autoplay";
 import SaleBanner from "@/components/student-view/sale-banner"
-
+import BackToTop from "@/components/ui/back-to-top"
 
 
 function CategoryTrack({ categories, reverse }) {
@@ -166,6 +166,7 @@ function StudentHomePage() {
             </div>
           </Carousel>               
         </section>
+        <BackToTop/>
     </div>  );
 }
 

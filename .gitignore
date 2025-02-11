@@ -25,3 +25,5 @@ yarn-error.log*
 # Local files
 server/uploads
 server/csd.js
+out/linecounter.json
+out/linecounter.txt

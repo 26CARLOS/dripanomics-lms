@@ -27,7 +27,7 @@ function CourseCard({ title, instructorName, image, pricing, _id }) {
   }
   
   return (
-    <Card className="w-full h-full flex flex-col">
+    <Card className="w-full h-full flex flex-col mt-4">
       <div onClick={() => handleCourseNavigate(_id)}>
         <img 
           src={image} 
@@ -41,7 +41,7 @@ function CourseCard({ title, instructorName, image, pricing, _id }) {
           <p className="text-xs sm:text-sm text-muted-foreground">{instructorName}</p>
         </CardContent>
       </div>
-      <CardFooter className="flex justify-between items-center p-2 sm:p-4">
+      <CardFooter className="flex justify-between items-center p-2 sm:p-4 md:flex-col">
         <span className="text-sm sm:text-lg font-bold">R{pricing.toFixed(2)}</span>
         <AddToCart courseId={_id} />
       </CardFooter>

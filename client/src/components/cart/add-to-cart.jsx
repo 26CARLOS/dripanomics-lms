@@ -55,7 +55,7 @@ function AddToCart({ courseId, variant = "" }) {
         <Button 
           onClick={handleAddToCart} 
           variant={variant}
-          size="sm" className="text-md sm:text-sm flex justify-evenly"
+          size="sm" className="text-md sm:text-sm flex flex-shrink justify-evenly"
         >
           <ShoppingCart className="mr-2 h-4 w-4" />
           <PlusCircle className="mr-2 h-4 w-4" />

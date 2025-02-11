@@ -66,6 +66,7 @@ function App() {
       <Route path="/" element={<StudentViewCommonLayout />}>
         <Route path="" element={<StudentHomePage />} />
         <Route path="home" element={<StudentHomePage />} />
+        <Route path="/courses" element={<StudentViewCoursesPage />} />
       </Route>
       
       {/* Protected Student Routes */}
@@ -79,7 +80,6 @@ function App() {
           />
         }
       >
-        <Route path="/courses" element={<StudentViewCoursesPage />} />
         <Route path="/course/details/:id" element={<StudentCourseDetails />} />
         <Route path="/payment-return" element={<PaymentReturnPage />} />        
         <Route path="/payment-cancel" element={<PaymentCancelPage />} />
