@@ -81,7 +81,7 @@ console.log(loginFormData, registerFormData);
                         <CardContent>
                         <CommonForm 
                         formControls={RegisterFormControls}
-                        buttonText={'Log in'}
+                        buttonText={'Register'}
                         formData={registerFormData}
                         setFormData={setRegisterFormData}
                         isButtonDisabled={!checkRegisterFormValidity()}

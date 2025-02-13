@@ -1,7 +1,7 @@
 import { Button } from "../ui/button";
 import FormControls from "./form-controls";
 import { useContext } from "react";
-import AuthContext from '@/context/auth-context';
+import {AuthContext} from '@/context/auth-context';
 
 function CommonForm({
   handleSubmit,
@@ -12,8 +12,8 @@ function CommonForm({
   isButtonDisabled = true,
 }) 
 {
-  const {loading} = useContext(AuthContext);
-
+  const {startLoad} = useContext(AuthContext);
+  console.log(startLoad, "loading state")
   return (
     <form onSubmit={handleSubmit}>
       <FormControls
@@ -22,11 +22,12 @@ function CommonForm({
        setFormData={setFormData} 
        />
       <Button disabled={isButtonDisabled} className="mt-5 w-full" type="submit">
-        {loading ? <span class="relative flex size-3">
-        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
-        <span class="relative inline-flex size-3 rounded-full bg-sky-500"></span>
-      </span>:null}
-        {buttonText || "Submit"}</Button>
+        {startLoad ? <span className="relative flex size-4">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gray-400 opacity-75"></span>
+        <span className="relative inline-flex size-3 rounded-full bg-gray-500"></span>
+      </span> : buttonText || "Submit"
+      }
+        </Button>
     </form>
   );
 }

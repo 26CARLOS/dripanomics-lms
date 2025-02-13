@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from "react";
 import { loginService, registerService, checkAuthService } from "@/services";
 import {useNavigate} from 'react-router-dom';
 import { Skeleton } from "@/components/ui/skeleton";
-
+import { useToast } from "@/hooks/use-toast"
 
 export const AuthContext = createContext(null);
 
@@ -18,36 +18,52 @@ export default function AuthProvider({ children }) {
 
     const [loading, setLoading] = useState(true);
     const [startLoad, setStartLoad] = useState(false);
-
+    const { toast } = useToast()
     const navigate = useNavigate();
 
-    async function handleRegisterSubmit(event) {   
+    async function handleRegisterSubmit(event) {
         event.preventDefault();
         setStartLoad(true);
         const data = await registerService(registerFormData);
         if(data.success){
             setStartLoad(false)
+            toast({
+                title: "Registration successful",
+                description: "You can now login",
+            });
         }
 
     }
 
     async function handleLoginSubmit(event) {   
         event.preventDefault();
-        setStartLoad(true)
-        const data = await loginService(loginFormData);
-        
-        if(data.success){
-            sessionStorage.setItem('accessToken', JSON.stringify(data.data.accessToken));
-            setAuth({
-                authenticated: true,
-                user: data.data.user,});
-                setStartLoad(false);
-        }
-        else{
+        setStartLoad(true);
+        try {
+            const data = await loginService(loginFormData);
+            
+            if(data.success){
+                sessionStorage.setItem('accessToken', JSON.stringify(data.data.accessToken));
+                const { userName } = data.data.user;
+                setAuth({
+                    authenticated: true,
+                    user: data.data.user,
+                });
+                toast({
+                    title: "Logged in successfully",
+                    description: `Welcome back ${userName}!`,
+                });
+            }
+        } catch (error) {
             setAuth({
                 authenticated: false,
                 user: null,
             });
+            toast({
+                title: "Login failed",
+                description: "Invalid email or password",
+                variant: "destructive",
+            });
+        } finally {
             setStartLoad(false);
         }
     }
