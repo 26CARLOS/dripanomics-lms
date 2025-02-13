@@ -1,0 +1,47 @@
+import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect } from "react"
+
+function AnimatedLogo() {
+  const [showFull, setShowFull] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowFull(true)
+    }, 1000) // Start animation after 1 second
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  return (
+    <div className="relative font-extrabold text-lg md:text-xl flex items-center">
+      <AnimatePresence>
+        {showFull && (
+          <motion.span
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="mr-1"
+          >
+            Dripanomics
+          </motion.span>
+        )}
+      </AnimatePresence>
+      <motion.span
+        initial={{ x: 0 }}
+        animate={{ x: showFull ? 0 : 40 }}
+        transition={{
+          type: "spring",
+          stiffness: 50, // Reduced stiffness for softer movement
+          damping: 10, // Reduced damping for a bit more bounce
+          mass: 1,
+          duration: 1.2, // Increased duration for slower movement
+        }}
+      >
+        Grail
+      </motion.span>
+    </div>
+  )
+}
+
+export default AnimatedLogo
+

@@ -17,7 +17,9 @@ function MobileMenu({ onLogOut, isAdmin, authenticated }) {
 
   return (
     <div className="md:hidden flex fex-row justify-center items-center space-x-4 left-4 overflow-x-hidden h-[42px]">
-      <CartIcon/>
+      { !isAdmin ?
+        <CartIcon/> : null
+        }
       <Button variant="ghost" onClick={toggleMenu}>
         {isOpen ? <X /> : <Menu className='w-8 h-8'/>}
       </Button>

@@ -7,6 +7,7 @@ import { AuthContext } from "../../context/auth-context"
 import { useNavigate } from "react-router-dom"
 import MobileMenu  from "./mobile-menu"
 import CartIcon from "@/components/cart/cart-icon"
+import AnimatedLogo from "@/components/animated/animated-logo"
 
 function StudentViewCommonHeader() {
   const navigate = useNavigate()
@@ -23,7 +24,7 @@ function StudentViewCommonHeader() {
       <div className="flex items-center">
         <Link to="home" className="flex items-center space-x-2">
           <GraduationCap className="h-8 w-8 mr-2 hover:text-gray-800" />
-          <span className="font-extrabold text-lg md:text-xl">Dripanomics Tutorials</span>
+          <AnimatedLogo/>
           {auth?.user?.role === 'admin'&&(<Badge>Admin</Badge>)}
         </Link>
       </div>
@@ -44,7 +45,9 @@ function StudentViewCommonHeader() {
                 </Button>
         )}
 
-        <CartIcon className="cursor-pointer"/>
+        {auth?.user?.role === 'admin' ? null :
+          <CartIcon className="cursor-pointer"/>
+          }
         {
           auth.authenticated ?
             <Button onClick={handleLogOut} className="text-base font-medium">
