@@ -17,30 +17,38 @@ export default function AuthProvider({ children }) {
     });
 
     const [loading, setLoading] = useState(true);
+    const [startLoad, setStartLoad] = useState(false);
 
     const navigate = useNavigate();
 
     async function handleRegisterSubmit(event) {   
         event.preventDefault();
+        setStartLoad(true);
         const data = await registerService(registerFormData);
-        console.log(data);
+        if(data.success){
+            setStartLoad(false)
+        }
+
     }
 
     async function handleLoginSubmit(event) {   
         event.preventDefault();
+        setStartLoad(true)
         const data = await loginService(loginFormData);
-
+        
         if(data.success){
             sessionStorage.setItem('accessToken', JSON.stringify(data.data.accessToken));
             setAuth({
                 authenticated: true,
                 user: data.data.user,});
+                setStartLoad(false);
         }
         else{
             setAuth({
                 authenticated: false,
                 user: null,
             });
+            setStartLoad(false);
         }
     }
 
@@ -96,6 +104,8 @@ async function checkAuthUser(){
             handleLoginSubmit,
             auth,
             resetCredentials,
+            startLoad, 
+            setStartLoad
         }}>
             {loading ? <Skeleton/> : children}
         </AuthContext.Provider>

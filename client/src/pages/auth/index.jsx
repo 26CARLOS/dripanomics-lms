@@ -16,7 +16,8 @@ const {
     registerFormData, 
     setRegisterFormData,
     handleRegisterSubmit,
-    handleLoginSubmit
+    handleLoginSubmit,
+    startLoad, 
 } = useContext(AuthContext);
 
 function handleTabChange(value) {
