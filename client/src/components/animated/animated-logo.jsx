@@ -22,23 +22,10 @@ function AnimatedLogo() {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="mr-1"
           >
-            Dripanomics
+            Dripanomics Grail
           </motion.span>
         )}
       </AnimatePresence>
-      <motion.span
-        initial={{ x: 0 }}
-        animate={{ x: showFull ? 0 : 40 }}
-        transition={{
-          type: "spring",
-          stiffness: 50, // Reduced stiffness for softer movement
-          damping: 10, // Reduced damping for a bit more bounce
-          mass: 1,
-          duration: 1.2, // Increased duration for slower movement
-        }}
-      >
-        Grail
-      </motion.span>
     </div>
   )
 }
