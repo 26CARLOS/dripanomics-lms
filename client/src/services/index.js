@@ -1,5 +1,7 @@
 import axiosInstance from "@/api/axiosinstance"
 
+
+////auth services
 export async function registerService(formData){
     const { data}  = await axiosInstance.post('/auth/register', 
         {...formData, 
@@ -21,48 +23,22 @@ export async function checkAuthService(formData){
     return data
 }
 
-export async function mediaUploadService(formData, onProgressCallback) {
-    const { data } = await axiosInstance.post('/media/upload', formData, {
-        onUploadProgress: (progressEvent) => {
-            if (progressEvent.total) {
-                const percentageCompleted = Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                );
-                if (onProgressCallback) {
-                    onProgressCallback(percentageCompleted);
-                }
-            }
-        },
+export async function forgotPasswordService(email) {
+    const { data } = await axiosInstance.post('/auth/forgot-password', { email });
+    return data;
+}
+
+export async function resetPasswordService(token, newPassword) {
+    const { data } = await axiosInstance.post(`/auth/reset-password/${token}`, { 
+        password: newPassword 
     });
-
     return data;
 }
 
 
-export async function mediaDeleteService(id) {
-    const { data } = await axiosInstance.delete(`/media/delete/${id}`);
 
-    return data;
-}
 
-export async function fetchAdminCourseListService(){
-    const { data } = await axiosInstance.get(`/admin/course/get`);
-
-    return data;
-}
-
-export async function addNewCourseService(courseData){
-    const { data } = await axiosInstance.post(`/admin/course/add`, courseData);
-
-    return data;
-}
-
-export async function fetchAdminCourseDetailsService(id){
-    const { data } = await axiosInstance.get(`/admin/course/get/details/${id}`);
-
-    return data;
-}
-
+//// media upload services
 export async function updateCourseByIdService(id, courseData){
     const { data } = await axiosInstance.put(`/admin/course/update/${id}`, courseData);
 
@@ -90,6 +66,32 @@ export async function mediaBulkUploadService(formData, onProgressCallback) {
     return data;
 }
 
+
+export async function mediaUploadService(formData, onProgressCallback) {
+    const { data } = await axiosInstance.post('/media/upload', formData, {
+        onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+                const percentageCompleted = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                );
+                if (onProgressCallback) {
+                    onProgressCallback(percentageCompleted);
+                }
+            }
+        },
+    });
+
+    return data;
+}
+
+
+export async function mediaDeleteService(id) {
+    const { data } = await axiosInstance.delete(`/media/delete/${id}`);
+
+    return data;
+}
+
+//// fetch courses services
 export async function fetchAllStudentCoursesService(query){
     const { data } = await axiosInstance.get(`/student/course/get?${query}`);
 
@@ -101,6 +103,27 @@ export async function fetchStudentCourseDetailsService(id){
 
     return data;
 }
+
+export async function fetchAdminCourseListService(){
+    const { data } = await axiosInstance.get(`/admin/course/get`);
+
+    return data;
+}
+
+export async function addNewCourseService(courseData){
+    const { data } = await axiosInstance.post(`/admin/course/add`, courseData);
+
+    return data;
+}
+
+export async function fetchAdminCourseDetailsService(id){
+    const { data } = await axiosInstance.get(`/admin/course/get/details/${id}`);
+
+    return data;
+}
+
+
+////payment services
 
 export async function createPaymentService(data){
     const { data: responseData } = await axiosInstance.post(`/student/order/create`, data);
@@ -119,7 +142,7 @@ export async function finalizePaymentsService(order_id, paymentId, payerId){
 
 }
 
-
+////purchase info services
 
 export async function fetchStudentPurchasedCoursesService(studentid){
     const { data } = await axiosInstance.get(`/student/my-courses/get/${studentid}`);
@@ -136,7 +159,7 @@ export async function verifyEmailService(token) {
     return data;
 }
 
-
+////cart services
 export async function addToCartService(data) {
     const { data: responseData } = await axiosInstance.post('/student/cart/add', data);
     return responseData;
@@ -151,6 +174,9 @@ export async function removeFromCartService(userId, courseId) {
     const { data } = await axiosInstance.delete(`/student/cart/remove/${userId}/${courseId}`);
     return data;
 }
+
+
+////course progress services
 
 export async function getCurrentCourseProgressService(userId, courseId) {
     const { data } = await axiosInstance.get(

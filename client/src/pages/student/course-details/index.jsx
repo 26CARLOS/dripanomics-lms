@@ -26,6 +26,7 @@ import {checkCoursePurchaseInfoService} from '@/services'
 import AddToCart from '@/components/cart/add-to-cart';
 import BuyNow from '@/components/cart/buy-now';
 import { useNavigate } from 'react-router-dom'; 
+import { Helmet } from 'react-helmet-async';
 
 function SudentCourseDetials () {
 
@@ -180,6 +181,36 @@ function SudentCourseDetials () {
 
     }
       return (
+        <>
+        <Helmet>
+          <title>{studentViewCourseDetials?.title} | Dripanomics Tutorials</title>
+          <meta name="description" content={studentViewCourseDetials?.description} />
+          <meta property="og:title" content={studentViewCourseDetials?.title} />
+          <meta property="og:description" content={studentViewCourseDetials?.description} />
+          <meta property="og:image" content={studentViewCourseDetials?.image} />
+        </Helmet>
+        <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Course",
+          "name": studentViewCourseDetials?.title,
+          "description": studentViewCourseDetials?.description,
+          "provider": {
+            "@type": "Organization",
+            "name": "Dripanomics Grail",
+            "sameAs": "https://www.dripanomicstutorials.com"
+          },
+          "instructor": {
+            "@type": "Person",
+            "name": studentViewCourseDetials?.InstructorName
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": studentViewCourseDetials?.pricing,
+            "priceCurrency": "ZAR"
+          }
+        })}
+      </script>
         <div className="container mx-auto px-4 py-8 flex flex-col gap-8 overflow-hidden">
           <div className="bg-gray-900 text-white p-8 rounded-lg mb-4">
           <div className='flex items-center gap-4 justify-between sm:flex-col'>
@@ -270,47 +301,49 @@ function SudentCourseDetials () {
             </CardFooter>
           </Card>
         </aside>
-    </div>
-    <Dialog 
-    open={showFreePreviewDialog} 
-    onOpenChange={() => {
-        setShowFreePreviewDialog(false);
-        setDisplayCurrentFreePreview(null);
-    }}>
-      <DialogContent className="w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Sneak Peek</DialogTitle>
-        </DialogHeader>
-        <div className="aspect-video rounded-lg flex items-center justify-center">
-                <VideoPlayer
-                  url={
-                    displayCurrentFreePreview
-                  }
-                  width="450px"
-                  height="200px"
-                />
-              </div>
-              <div className='flex flex-col gap-2'>
-                  {
-                    studentViewCourseDetials?.curriculum.filter(item=>item.freePreview)
-                    .map(filteredItem=>
-                        <p key={filteredItem._id} onClick={()=>handleSetFreePreview(filteredItem)} 
-                        className='cursor-pointer text-[16px] font-medium'>
-                            {filteredItem.title}
-                            </p>
-                    )
-                  }
-              </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button type="button" variant="secondary" onClick={() => setShowFreePreviewDialog(false)}>
-                Close
-            </Button>
-            </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>    
-</div>
+      </div>
+      <Dialog 
+      open={showFreePreviewDialog} 
+      onOpenChange={() => {
+          setShowFreePreviewDialog(false);
+          setDisplayCurrentFreePreview(null);
+      }}>
+        <DialogContent className="w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Sneak Peek</DialogTitle>
+          </DialogHeader>
+          <div className="aspect-video rounded-lg flex items-center justify-center">
+                  <VideoPlayer
+                    url={
+                      displayCurrentFreePreview
+                    }
+                    width="450px"
+                    height="200px"
+                  />
+                </div>
+                <div className='flex flex-col gap-2'>
+                    {
+                      studentViewCourseDetials?.curriculum.filter(item=>item.freePreview)
+                      .map(filteredItem=>
+                          <p key={filteredItem._id} onClick={()=>handleSetFreePreview(filteredItem)} 
+                          className='cursor-pointer text-[16px] font-medium'>
+                              {filteredItem.title}
+                              </p>
+                      )
+                    }
+                </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="secondary" onClick={() => setShowFreePreviewDialog(false)}>
+                  Close
+              </Button>
+              </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>    
+  </div>
+  </>
+        
       )
 }
     

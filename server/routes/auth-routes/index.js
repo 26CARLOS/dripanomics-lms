@@ -1,5 +1,5 @@
 const express = require('express');
-const {registerUser, loginUser } = require('../../controllers/auth-controller/index');
+const {registerUser, loginUser, forgotPassword, resetPassword } = require('../../controllers/auth-controller/index');
 const authenticateMiddleware = require('../../middleware/auth-middleware');
 const router = express.Router();
 
@@ -17,5 +17,7 @@ router.get('/check-auth', authenticateMiddleware, (req, res) => {
         }
     });
 })
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password/:token', resetPassword);
 
 module.exports = router;

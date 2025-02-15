@@ -29,4 +29,42 @@ const sendVerificationEmail = async (email, verificationToken) => {
     }
 };
 
-module.exports = { sendVerificationEmail };
+async function sendPasswordResetEmail(email, resetUrl) {
+    try {
+
+
+        // Email options
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Reset Your Password - Dripanomics Grail',
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #333;">Reset Your Password</h2>
+                    <p>You requested to reset your password. Click the link below to set a new password:</p>
+                    <a href="${resetUrl}" 
+                       style="display: inline-block; padding: 10px 20px; margin: 20px 0; 
+                              background-color: #007bff; color: white; text-decoration: none; 
+                              border-radius: 5px;">
+                        Reset Password
+                    </a>
+                    <p>This link will expire in 1 hour.</p>
+                    <p>If you didn't request this, please ignore this email.</p>
+                    <p>Best regards,<br>Dripanomics Grail Team</p>
+                </div>
+            `
+        };
+
+        // Send email
+        await transporter.sendMail(mailOptions);
+        return true;
+    } catch (error) {
+        console.error('Error sending reset password email:', error);
+        throw new Error('Failed to send reset password email');
+    }
+}
+
+module.exports = {
+    sendPasswordResetEmail,
+    sendVerificationEmail
+};

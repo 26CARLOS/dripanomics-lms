@@ -40,7 +40,6 @@ export default function AuthProvider({ children }) {
         setStartLoad(true);
         try {
             const data = await loginService(loginFormData);
-            
             if(data.success){
                 sessionStorage.setItem('accessToken', JSON.stringify(data.data.accessToken));
                 const { userName } = data.data.user;

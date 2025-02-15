@@ -12,7 +12,6 @@ import AnimatedLogo from "@/components/animated/animated-logo"
 function StudentViewCommonHeader() {
   const navigate = useNavigate()
   const { auth ,resetCredentials } = useContext(AuthContext)
-
   function handleLogOut() {
     resetCredentials()
     sessionStorage.clear()

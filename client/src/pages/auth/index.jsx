@@ -40,7 +40,7 @@ console.log(loginFormData, registerFormData);
         <header className="px-4 lg:px-6 h-14 flex items-center border bottom">
             <Link to={'/'} className="flex items-center justify-center">
             <GraduationCap className='h-8 w-8 mr-4'/>
-            <span className='font-extrabold text-xl'>Dripanmics Tutorials</span>
+            <span className='font-extrabold text-xl'>Dripanmics Grail</span>
             </Link>
         </header>
         <div className='flex items-center justify-center min-h-screen bg-gray'>
@@ -69,6 +69,14 @@ console.log(loginFormData, registerFormData);
                         isButtonDisabled={!checkLoginFormValidity()}
                         handleSubmit={handleLoginSubmit}
                         />
+                        <div className="text-center mt-4">
+                                <Link 
+                                    to="/forgot-password" 
+                                    className="text-sm text-gray-600 hover:text-blue-800"
+                                >
+                                    Forgot Password?
+                                </Link>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -87,6 +95,7 @@ console.log(loginFormData, registerFormData);
                         isButtonDisabled={!checkRegisterFormValidity()}
                         handleSubmit={handleRegisterSubmit}
                         />
+                            
                         </CardContent>
                     </Card>                
                 </TabsContent>
