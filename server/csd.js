@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const StudentCourses = require('./models/StudentCourses');
-const Course = require('./models/Course');
+const User = require('./models/User');
 require('dotenv').config();
 
 async function clearStudentData() {
@@ -11,20 +11,12 @@ async function clearStudentData() {
         await mongoose.connect("mongodb+srv://carlosjuma821:wpWA5ykyyeZoKMAb@cluster0.ovw1j.mongodb.net/");
         console.log('Connected to MongoDB');
 
-        // Delete all student courses
-        const deleteStudentCourses = await StudentCourses.deleteMany({});
-        console.log('Deleted StudentCourses:', deleteStudentCourses.deletedCount);
-
-        // Clear students array from all courses
-        const updateCourses = await Course.updateMany(
-            {}, 
-            { $set: { students: [] } }
-        );
-        console.log('Updated Courses:', updateCourses.modifiedCount);
-
-        console.log('Successfully cleared all student data');
+            await User.updateMany(
+                { isVerified: { $exists: false } },
+                { $set: { isVerified: true } } // Mark existing users as verified
+            );
     } catch (error) {
-        console.error('Error clearing student data:', error);
+        console.error('Error changing user data:', error);
     } finally {
         await mongoose.disconnect();
         console.log('Disconnected from MongoDB');

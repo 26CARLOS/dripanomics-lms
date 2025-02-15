@@ -6,7 +6,13 @@ userSchema = new mongoose.Schema({
     password: String,
     role : String,
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationToken: String,
+    verificationExpires: Date
 })
 
 module.exports = mongoose.model('User', userSchema);

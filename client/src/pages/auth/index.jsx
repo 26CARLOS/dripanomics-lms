@@ -6,10 +6,9 @@ import { GraduationCap } from 'lucide-react';
 import React, {useState, useContext} from 'react';
 import { AuthContext } from '@/context/auth-context';
 import { Link } from 'react-router-dom';
+import ResendVerification  from "@/components/auth/resend-verification";
 
 function AuthPage() {
-const [activeTab, setActiveTab] = useState('login');
-
 const {
     loginFormData, 
     setLoginFormData, 
@@ -18,6 +17,9 @@ const {
     handleRegisterSubmit,
     handleLoginSubmit,
     startLoad, 
+    activeTab,
+    setActiveTab,
+    showResendVerification,
 } = useContext(AuthContext);
 
 function handleTabChange(value) {
@@ -35,6 +37,8 @@ function checkLoginFormValidity(){
 
 console.log(loginFormData, registerFormData);
 
+console.log(showResendVerification, "show resend")
+
   return (
     <div className="flex flex-col 100-vh min-h-screen">
         <header className="px-4 lg:px-6 h-14 flex items-center border bottom">
@@ -44,6 +48,7 @@ console.log(loginFormData, registerFormData);
             </Link>
         </header>
         <div className='flex items-center justify-center min-h-screen bg-gray'>
+            
             <Tabs
             value={activeTab}
             defaultValue='login'
@@ -69,6 +74,12 @@ console.log(loginFormData, registerFormData);
                         isButtonDisabled={!checkLoginFormValidity()}
                         handleSubmit={handleLoginSubmit}
                         />
+                            {showResendVerification && (
+                                <ResendVerification 
+                                    email={loginFormData.userEmail} 
+                                />
+                            )}
+                        
                         <div className="text-center mt-4">
                                 <Link 
                                     to="/forgot-password" 

@@ -20,19 +20,33 @@ export default function AuthProvider({ children }) {
     const [startLoad, setStartLoad] = useState(false);
     const { toast } = useToast()
     const navigate = useNavigate();
+    const [activeTab, setActiveTab] = useState('login');
+    const [showResendVerification,setShowResendVerification] = useState(false);
 
     async function handleRegisterSubmit(event) {
         event.preventDefault();
         setStartLoad(true);
-        const data = await registerService(registerFormData);
-        if(data.success){
-            setStartLoad(false)
+        try {
+            const data = await registerService(registerFormData);
+            if(data.success) {
+                toast({
+                    title: "Registration successful",
+                    description: "Please check your email to verify your account",
+                });
+                // Use setActiveTab instead of handleTabChange
+                setActiveTab('login');
+                // Clear registration form
+                setRegisterFormData(initialRegisterFormData);
+            }
+        } catch (error) {
             toast({
-                title: "Registration successful",
-                description: "You can now login",
+                title: "Registration failed",
+                description: error.response?.data?.message || "Something went wrong",
+                variant: "destructive"
             });
+        } finally {
+            setStartLoad(false);
         }
-
     }
 
     async function handleLoginSubmit(event) {   
@@ -40,7 +54,19 @@ export default function AuthProvider({ children }) {
         setStartLoad(true);
         try {
             const data = await loginService(loginFormData);
-            if(data.success){
+            // Check for verification first
+            if (!data.success && data.message === "Please verify your email before logging in") {
+                setShowResendVerification(true);
+                toast({
+                    title: "Login failed",
+                    description: "Please verify your email before logging in",
+                    variant: "destructive"
+                });
+                return; 
+            }
+    
+            // Handle successful login
+            if (data.success) {
                 sessionStorage.setItem('accessToken', JSON.stringify(data.data.accessToken));
                 const { userName } = data.data.user;
                 setAuth({
@@ -57,9 +83,12 @@ export default function AuthProvider({ children }) {
                 authenticated: false,
                 user: null,
             });
+            if (error.response?.data?.message === "Please verify your email before logging in") {
+                setShowResendVerification(true);
+            }
             toast({
                 title: "Login failed",
-                description: "Invalid email or password",
+                description: error.response?.data?.message || "Invalid email or password",
                 variant: "destructive",
             });
         } finally {
@@ -120,7 +149,11 @@ async function checkAuthUser(){
             auth,
             resetCredentials,
             startLoad, 
-            setStartLoad
+            setStartLoad,
+            activeTab,
+            setActiveTab,
+            showResendVerification,
+            setShowResendVerification
         }}>
             {loading ? <Skeleton/> : children}
         </AuthContext.Provider>

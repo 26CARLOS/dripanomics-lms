@@ -17,6 +17,7 @@ import PaymentCancelPage from "./pages/student/payment-cancel"
 import CartPage from './pages/student/cart'
 import ForgotPassword from './pages/auth/forgot-password'
 import ResetPassword from './pages/auth/reset-password'
+import VerifyEmail from './pages/auth/verify-email';
 
 function App() {
   const { auth } = useContext(AuthContext);
@@ -72,6 +73,7 @@ function App() {
         <Route path="/courses" element={<StudentViewCoursesPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} /> 
+        <Route path="/verify-email/:token" element={<VerifyEmail />} />
       </Route>
       
       {/* Protected Student Routes */}

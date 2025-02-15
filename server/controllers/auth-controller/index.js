@@ -2,66 +2,195 @@ const crypto = require('crypto');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { sendPasswordResetEmail } = require('../../helpers/email');
+const { sendPasswordResetEmail, sendVerificationEmail } = require('../../helpers/email');
 
 
 const registerUser = async(req, res) => {
     const {userName, userEmail, password, role} = req.body;
 
-    const existingUser = await User.findOne({userEmail});
+    try {
+        const existingUser = await User.findOne({userEmail});
 
-    if(existingUser){
-        return res.status(400).json({
+        if(existingUser){
+            return res.status(400).json({
+                success: false,
+                message: 'User already exists'
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 12);
+        
+        // Create new user with verification defaults
+        const newUser = new User({
+            userName, 
+            userEmail, 
+            password: hashedPassword, 
+            role,
+            isVerified: false, // Default to unverified
+            verificationToken: crypto.randomBytes(32).toString('hex'),
+            verificationExpires: Date.now() + 3600000 // 1 hour expiry
+        });
+        
+        await newUser.save();
+
+        try {
+            // Send verification email
+            const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${newUser.verificationToken}`;
+            await sendVerificationEmail(userEmail, verificationUrl);
+
+            return res.status(201).json({
+                success: true,
+                message: 'Registration successful! Please check your email to verify your account.'
+            });
+        } catch (emailError) {
+            // If email fails, still create account but inform user
+            console.error('Email sending failed:', emailError);
+            return res.status(201).json({
+                success: true,
+                message: 'Registration successful but verification email could not be sent. Please contact support.'
+            });
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+        return res.status(500).json({
             success: false,
-            message: 'User already exists'});
+            message: 'Registration failed. Please try again.'
+        });
     }
+};
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+const verifyEmail = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const user = await User.findOne({
+            verificationToken: token,
+            verificationExpires: { $gt: Date.now() }
+        });
 
-    const newUser  = new User({userName, userEmail, password: hashedPassword, role});
-    await newUser.save();
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid or expired verification token'
+            });
+        }
 
-    return res.status(201).json({
-        success : true,
-        message: 'User registered successfully!'
-    })
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        user.verificationExpires = undefined;
+        await user.save();
 
+        res.status(200).json({
+            success: true,
+            message: 'Email verified successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Email verification failed'
+        });
+    }
+};
+
+const resendVerificationEmail = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ userEmail: email });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.isVerified) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email is already verified'
+            });
+        }
+
+        // Generate new verification token
+        user.verificationToken = crypto.randomBytes(32).toString('hex');
+        user.verificationExpires = Date.now() + 3600000; // 1 hour
+        await user.save();
+
+        // Send new verification email
+        const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${user.verificationToken}`;
+        await sendVerificationEmail(user.userEmail, verificationUrl);
+
+        res.status(200).json({
+            success: true,
+            message: 'Verification email resent successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to resend verification email'
+        });
+    }
 };
 
 const loginUser = async(req, res) => {
     const {userEmail, password} = req.body;
 
-    const checkUser = await User.findOne({userEmail});
+    try {
+        const user = await User.findOne({userEmail});
 
-    if(!checkUser || !(await bcrypt.compare(password, checkUser.password))){
-        return res.status(401).json({
+        // Check if user exists
+        if(!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email or password'
+            });
+        }
+
+        // Verify password
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if(!isValidPassword) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email or password'
+            });
+        }
+
+        // Check email verification
+        if (!user.isVerified) {
+            return res.status(401).json({
+                success: false,
+                message: 'Please verify your email before logging in'
+            });
+        }
+
+        // Generate token
+        const accessToken = jwt.sign({
+            _id: user._id,
+            userName: user.userName,
+            userEmail: user.userEmail,
+            role: user.role
+        }, 'JWT_SECRET', {expiresIn: '120m'});
+
+        return res.status(200).json({
+            success: true,
+            message: 'User logged in successfully',
+            data: {
+                accessToken,
+                user: {
+                    _id: user._id,
+                    userName: user.userName,
+                    userEmail: user.userEmail,
+                    role: user.role
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({
             success: false,
-            message: 'Invalid credentials',
+            message: 'Login failed. Please try again.'
         });
     }
-
-    const accessToken = jwt.sign({
-        _id: checkUser._id,
-        userName : checkUser.userName,
-        userEmail : checkUser.userEmail,
-        role: checkUser.role
-    }
-    , 'JWT_SECRET', {expiresIn: '120m'});
-
-    return res.status(200).json({
-        success: true,
-        message: 'User logged in successfully',
-        data  :{
-            accessToken,
-            user: {
-                _id: checkUser._id,
-                userName: checkUser.userName,
-                userEmail: checkUser.userEmail,
-                role: checkUser.role
-            }
-        }
-    });
-}
+};
 
 
 const forgotPassword = async (req, res) => {
@@ -147,4 +276,4 @@ const resetPassword = async (req, res) => {
     }
 };
 
-module.exports = {registerUser, loginUser, forgotPassword, resetPassword};
+module.exports = {registerUser, loginUser, forgotPassword, resetPassword, verifyEmail, resendVerificationEmail};

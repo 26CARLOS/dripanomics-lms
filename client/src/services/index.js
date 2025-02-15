@@ -35,8 +35,15 @@ export async function resetPasswordService(token, newPassword) {
     return data;
 }
 
+export const verifyEmailService = async (token) => {
+    const { data } = await axiosInstance.get(`/auth/verify-email/${token}`);
+    return data;
+};
 
-
+export const resendVerificationEmailService = async (email) => {
+    const { data } = await axiosInstance.post('/auth/resend-verification', { email });
+    return data;
+};
 
 //// media upload services
 export async function updateCourseByIdService(id, courseData){
@@ -151,11 +158,6 @@ export async function fetchStudentPurchasedCoursesService(studentid){
 
 export async function checkCoursePurchaseInfoService(id, studentId){
     const { data } = await axiosInstance.get(`student/course/purchase-info/${id}/${studentId}`);
-    return data;
-}
-
-export async function verifyEmailService(token) {
-    const { data } = await axiosInstance.get(`/auth/verify/${token}`);
     return data;
 }
 
