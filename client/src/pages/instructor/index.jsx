@@ -77,8 +77,8 @@ function InstructorDashboardPage () {
 
       {/* Sidebar */}
       <aside className={`
-        fixed md:static w-64 bg-white h-full z-40
-        transition-transform duration-300 ease-in-out
+        fixed md:static w-64 bg-white h-[100vh] z-40
+        transition-transform duration-300 ease-in-out flex justify-evenly
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         md:translate-x-0
       `}>

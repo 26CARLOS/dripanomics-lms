@@ -10,6 +10,8 @@ const OrderRoutes = require('./routes/student-routes/order-routes');
 const StudentCourses_Routes = require('./routes/student-routes/student-courses-routes');
 const cartRoutes = require('./routes/student-routes/cart-routes');
 const studentCourseProgressRoutes = require('./routes/student-routes/course-progress-routes');
+const userRoutes = require('./routes/admin-routes/user-routes');
+const authenticateMiddleware = require('./middleware/auth-middleware');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -39,7 +41,7 @@ mongoose.connect(MONGO_URI, mongooseOptions)
 // CORS configuration
 app.use(cors({
     origin: process.env.CLIENT_URL,
-    methods: ['GET', 'POST', "DELETE", "PUT", 'OPTIONS'],
+    methods: ['GET', 'POST', "DELETE", "PUT", 'OPTIONS', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-PayFast-Signature'],
     credentials: true,
     exposedHeaders: ['Access-Control-Allow-Origin']
@@ -74,6 +76,8 @@ app.use('/student/cart', cartRoutes);
 app.use('/student/my-courses', StudentCourses_Routes);
 //////////////////////////////////////////////////
 app.use("/student/course-progress", studentCourseProgressRoutes);
+
+app.use('/admin/users', authenticateMiddleware, userRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

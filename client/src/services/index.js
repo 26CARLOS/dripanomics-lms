@@ -212,3 +212,38 @@ export async function getCurrentCourseProgressService(userId, courseId) {
   
     return data;
   }
+
+  ////admin search services
+
+  export async function searchUsersService(query) {
+    const { data } = await axiosInstance.get(`/admin/users/search?query=${query}`);
+    return data;
+}
+
+export async function searchCoursesService(query) {
+    const { data } = await axiosInstance.get(`/admin/courses/search?query=${query}`);
+    return data;
+}
+
+export async function getAllUsersService() {
+    const { data } = await axiosInstance.get('/admin/users');
+    return data;
+}
+
+////user management services
+export async function deleteUserService(userId) {
+    const { data } = await axiosInstance.delete(`/admin/users/delete/${userId}`);
+    return data;
+}
+
+export async function promoteUserService(userId) {
+    console.log('Promoting user with ID:', userId); // Add logging
+    try {
+        const { data } = await axiosInstance.patch(`/admin/users/promote/${userId}`);
+        console.log('Promotion response:', data); // Add logging
+        return data;
+    } catch (error) {
+        console.error('Promotion error:', error); // Add error logging
+        throw error;
+    }
+}
