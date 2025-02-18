@@ -7,8 +7,11 @@ import AuthProvider from './context/auth-context/index.jsx'
 import InstructorProvider from './context/instructor-context/index.jsx'
 import StudentProvider from './context/student-context'
 import {Toaster} from "@/components/ui/toaster"
+import { HelmetProvider } from 'react-helmet-async'
+
 createRoot(document.getElementById('root')).render(
 <BrowserRouter>
+<HelmetProvider>
   <AuthProvider>
     <InstructorProvider>
       <StudentProvider>
@@ -17,5 +20,6 @@ createRoot(document.getElementById('root')).render(
       </StudentProvider>
     </InstructorProvider>
   </AuthProvider>
+  </HelmetProvider>
 </BrowserRouter>
 )
