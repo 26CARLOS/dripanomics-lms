@@ -1,6 +1,7 @@
 const Order = require("../../models/Order");
 const Course = require("../../models/Course");
 const Cart = require("../../models/Cart")
+const User = require("../../models/User")
 const StudentCourses = require("../../models/StudentCourses");
 const { generateSignature, ITN_Signature, pfValidSignature } = require("../../helpers/payfast");
 const dns = require('dns');
@@ -312,6 +313,7 @@ async function processPayment(pfData) {
                         dateOfPurchase: order.orderDate,
                         courseImage: item.courseImage
                     });
+                    enrollStudent(item.courseId, order.userId);
 
                     console.log(item.courseTitle, 'added to student courses');
                     
@@ -330,6 +332,43 @@ async function processPayment(pfData) {
     }
 }
 
+async function enrollStudent(courseId, userId) {
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const course = await Course.findById(courseId);
+        if (!course) {
+            throw new Error('Course not found');
+        }
+
+        const updatedCourse = await Course.findByIdAndUpdate(
+            courseId,
+            {
+                $addToSet: {
+                    students: {
+                        studentId: user._id,
+                        studentName: user.userName,
+                        studentEmail: user.userEmail,
+                        amountPaid: course.pricing
+                    }
+                }
+            },
+            { new: true }
+        );
+
+        if (!updatedCourse) {
+            throw new Error('Failed to update course');
+        }
+
+        console.log(`Enrolled student ${user.userName} in course ${course.title}`);
+
+    } catch (error) {
+        console.error('Error enrolling student:', error.message);
+    }
+}
 
 module.exports = {
     handlePayFastNotification,

@@ -109,10 +109,53 @@ const promoteUser = async (req, res) => {
     }
 };
 
+const demoteUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: 'User ID is required'
+            });
+        }
+
+        const user = await User.findById(userId);
+        
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        if (user.role === 'user') {
+            return res.status(400).json({
+                success: false,
+                message: 'User is already a regular user'
+            });
+        }
+
+        user.role = 'user';
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'User demoted successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Failed to demote user'
+        });
+    }
+};
+
 module.exports = {
     getAllUsers,
     searchUsers,
     deleteUser,
-    promoteUser
+    promoteUser,
+    demoteUser
 };
 

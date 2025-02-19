@@ -237,13 +237,22 @@ export async function deleteUserService(userId) {
 }
 
 export async function promoteUserService(userId) {
-    console.log('Promoting user with ID:', userId); // Add logging
+    console.log('Promoting user with ID:', userId); 
     try {
         const { data } = await axiosInstance.patch(`/admin/users/promote/${userId}`);
-        console.log('Promotion response:', data); // Add logging
+        console.log('Promotion response:', data); 
         return data;
     } catch (error) {
-        console.error('Promotion error:', error); // Add error logging
+        console.error('Promotion error:', error); 
+        throw error;
+    }
+}
+
+export async function demoteUserService(userId) {
+    try {
+        const { data } = await axiosInstance.patch(`/admin/users/demote/${userId}`);
+        return data;
+    } catch (error) {
         throw error;
     }
 }

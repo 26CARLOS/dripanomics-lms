@@ -21,6 +21,9 @@ function AdminCourses({coursesList}) {
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredCourses, setFilteredCourses] = useState(coursesList);
 
+    console.log(coursesList);
+    
+
     const {
         currentEditedCourseId, 
         setCurrentEditedCourseId,

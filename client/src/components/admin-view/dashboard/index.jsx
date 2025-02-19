@@ -15,7 +15,7 @@ import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { searchUsersService, searchCoursesService, getAllUsersService } from "@/services";
 import { Button } from "@/components/ui/button";
-import { Shield, Trash2 } from "lucide-react";
+import { Shield, Trash2, ShieldCheck } from "lucide-react";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -27,7 +27,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import {promoteUserService, deleteUserService} from "@/services"
+import {promoteUserService, demoteUserService ,deleteUserService} from "@/services"
 
 
 function AdminDashboard({coursesList}) {
@@ -106,10 +106,10 @@ function AdminDashboard({coursesList}) {
     }
 
     async function handlePromoteUser(userId) {
-      console.log('Attempting to promote user:', userId); // Add logging
+      console.log('Attempting to promote user:', userId);
       try {
           const response = await promoteUserService(userId);
-          console.log('Promotion response:', response); // Add logging
+          console.log('Promotion response:', response);
           
           if (response.success) {
               toast({
@@ -130,6 +130,25 @@ function AdminDashboard({coursesList}) {
       }
   }
 
+  async function handleDemoteUser(userId) {
+    try {
+        const response = await demoteUserService(userId);
+        if (response.success) {
+            toast({
+                title: "Success",
+                description: "User demoted successfully",
+            });
+            await fetchUsers(); // Refresh user list
+        }
+    } catch (error) {
+        toast({
+            title: "Error",
+            description: error.response?.data?.message || "Failed to demote user",
+            variant: "destructive",
+        });
+    }
+}
+
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -143,7 +162,7 @@ function AdminDashboard({coursesList}) {
                 </Card>
                 <Card>
                     <CardHeader>
-                        <CardTitle>Total Admins</CardTitle>
+                        <CardTitle>Total Tutors</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{stats.totalAdmins}</div>
@@ -161,7 +180,7 @@ function AdminDashboard({coursesList}) {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Users Management</CardTitle>
+                    <CardTitle>User Management</CardTitle>
                     <div className="flex items-center space-x-4">
                         <div className="relative flex-1">
                             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -192,6 +211,7 @@ function AdminDashboard({coursesList}) {
                                     <TableHead>Email</TableHead>
                                     <TableHead>Role</TableHead>
                                     <TableHead>Status</TableHead>
+                                    <TableHead>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -211,7 +231,7 @@ function AdminDashboard({coursesList}) {
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex items-center gap-2">
-                                                {user.role !== 'admin' && (
+                                                {user.role !== 'admin' ? (
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
@@ -219,7 +239,16 @@ function AdminDashboard({coursesList}) {
                                                     >
                                                         <Shield className="h-4 w-4" />
                                                     </Button>
-                                                )}
+                                                ):(
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => handleDemoteUser(user._id)}
+                                                    >
+                                                        <ShieldCheck className="h-4 w-4 " />
+                                                    </Button>
+                                                )
+                                                }
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
