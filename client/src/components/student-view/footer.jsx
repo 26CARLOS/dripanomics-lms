@@ -3,7 +3,7 @@ import { GraduationCap, Facebook, Twitter, Instagram, Mail } from "lucide-react"
 
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-900 text-white mt-16 md:mt-auto">
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Column */}

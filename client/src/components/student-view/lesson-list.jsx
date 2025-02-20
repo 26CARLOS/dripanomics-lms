@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 function LessonList({ lessons, progress, onLessonClick }) {
   console.log(lessons)
   return (
-    <div className="p-4 space-y-4 border-2 rounded-md mt-2 w-[400px]">
+    <div className="p-4 space-y-4 border-2 rounded-md mt-2 w-[98vw] md:w-[40vw]">
       <h2 className="text-2xl font-bold">Lectures</h2>
       {lessons?.map((lesson) => {
         const isCompleted = progress?.find((progressItem) => progressItem.lectureId === lesson._id)?.viewed

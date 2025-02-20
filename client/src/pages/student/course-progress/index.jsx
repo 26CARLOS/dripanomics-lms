@@ -123,7 +123,7 @@ function StudentViewCourseProgressPage() {
   console.log(currentLecture, "currentLecture");
 
   return (
-    <div className="flex flex-col h-screen bg-white  p-16">
+    <div className="flex flex-col h-screen bg-white">
       {showConfetti && <Confetti />}
       <div className="flex items-center justify-between p-4 bg-gray-900 border-b border-gray-700 rounded-lg mt-3">
       <Button
@@ -140,7 +140,7 @@ function StudentViewCourseProgressPage() {
           </h1>
         </div>
       </div>
-      <div className="flex flex-1 ">
+      <div className="grid grid-rows-1 justify-center md:flex md:flex-row">
         <div className="w-full">
           <Card className="m-2">
             <CardContent
