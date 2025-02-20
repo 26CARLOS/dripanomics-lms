@@ -201,22 +201,22 @@ function VideoPlayer({
                         <div className="flex items-center justif-between">
                             <div className="flex items-center space-x-2">
                                 <Button variant="ghost" size="icon" onClick={handlePlayPause}
-                                    className="text-white hover:text-primary hover:bg-gray-700"
+                                    className="text-white hover:text-primary hover:bg-gray-700 bg-transparent"
                                 >
                                     {
                                         playing ? <Pause className="h-6 w-6"/> : <Play className="h-6 w-6"/>
                                     }
                                 </Button>
-                                <Button onClick={handleRewind} className="text-white hover:text-primary hover:bg-gray-700"
+                                <Button onClick={handleRewind} className="text-white hover:text-primary hover:bg-gray-700 bg-transparent"
                                 variant="ghost" size="icon">
                                     <RotateCcw className="h-6 w-6 "/>
                                 </Button>
-                                <Button onClick={handleForward} className="text-white hover:text-primary hover:bg-gray-700"
+                                <Button onClick={handleForward} className="text-white hover:text-primary hover:bg-gray-700 bg-transparent"
                                 variant="ghost" size="icon">
                                     <RotateCw className="h-6 w-6 "/>
                                 </Button>
 
-                                <Button onClick={handleToggleFullScreen} className="text-white hover:text-primary hover:bg-gray-700"
+                                <Button onClick={handleToggleFullScreen} className="text-white hover:text-primary hover:bg-gray-700 bg-transparent"
                                 variant="ghost" size="icon"
                                 >
                                     {
@@ -224,7 +224,7 @@ function VideoPlayer({
                                     }
                                 </Button>
 
-                                <Button onClick={handleToggleMute} className="text-white hover:text-primary hover:bg-gray-700"
+                                <Button onClick={handleToggleMute} className="text-white hover:text-primary hover:bg-gray-700 bg-transparent"
                                 variant="ghost" size="icon">
                                     {
                                         muted ? (<VolumeX/>) : (<Volume2/>)
