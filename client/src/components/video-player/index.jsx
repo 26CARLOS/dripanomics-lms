@@ -201,7 +201,7 @@ function VideoPlayer({
                         <div className="flex items-center justif-between">
                             <div className="flex items-center space-x-2">
                                 <Button variant="ghost" size="icon" onClick={handlePlayPause}
-                                    className="text-white hver:text-primary hover:bg-gray-700"
+                                    className="text-white hover:text-primary hover:bg-gray-700"
                                 >
                                     {
                                         playing ? <Pause className="h-6 w-6"/> : <Play className="h-6 w-6"/>

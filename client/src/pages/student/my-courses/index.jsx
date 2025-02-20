@@ -39,7 +39,7 @@ function StudentCoursesPage() {
                 {
                     purchasedCoursesList && purchasedCoursesList.length > 0 ? 
                     purchasedCoursesList.map(course => 
-                        <Card key={course.id} className='flex flex-col hover:shadow-lg m-2'>
+                        <Card key={course.courseId} className='flex flex-col hover:shadow-lg m-2'>
                             <CardContent className='p-4 flex-grow'>
                                 <img
                                 src={course.courseImage}

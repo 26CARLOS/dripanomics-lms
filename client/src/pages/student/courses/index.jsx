@@ -216,7 +216,7 @@ function StudentViewCoursesPage(){
                 //     </div>
                 //   </CardContent>
                 // </Card>
-                <CourseCard {...courseItem} />
+                <CourseCard {...courseItem} key={courseItem._id}/>
               ))
             ) : loading ?(<Skeleton/>)
             :(
