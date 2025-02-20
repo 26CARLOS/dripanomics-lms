@@ -105,4 +105,36 @@ const updateCourseByID = async(req, res) => {
     }
 }
 
-module.exports = { addNewCourse, updateCourseByID, getCourseDetailsByID, getAllCourses}
+const searchCourses = async(req, res) => {
+    try {
+        const { query } = req.query;
+        
+        const courses = await Course.find({
+            $or: [
+                { title: { $regex: query, $options: 'i' }},
+                { category: { $regex: query, $options: 'i' }},
+                { InstructorName: { $regex: query, $options: 'i' }}
+            ]
+        });
+
+        res.status(200).json({
+            success: true,
+            data: courses
+        });
+    } catch (error) {
+        console.error('Search error:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+module.exports = { 
+    addNewCourse, 
+    updateCourseByID, 
+    getCourseDetailsByID, 
+    getAllCourses,
+    searchCourses 
+};
+

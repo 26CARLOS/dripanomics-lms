@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import StudentViewCommonHeader from "./header";
+import Footer from './footer'
 import MiniCart from "./mini-cart";
 import { useLocation } from 'react-router-dom';
 
@@ -21,6 +22,7 @@ function StudentViewCommonLayout() {
       <Outlet/>
       </div>
       <MiniCart/>
+      <Footer/>
     </div>
   );
 }   

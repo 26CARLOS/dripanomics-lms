@@ -30,10 +30,11 @@ function CourseCard({ title, instructorName, image, pricing, _id }) {
     <Card className="w-full h-full flex flex-col mt-4">
       <div onClick={() => handleCourseNavigate(_id)}>
         <img 
-          src={image} 
+          src={`${image}?w=400&q=75`} 
           alt={title}
           width={300}
           height={150}
+          loading="lazy"
           className="w-full h-40 object-fit rounded-lg"
               />
         <CardContent className="p-2 sm:p-4 flex-grow" >
@@ -41,7 +42,7 @@ function CourseCard({ title, instructorName, image, pricing, _id }) {
           <p className="text-xs sm:text-sm text-muted-foreground">{instructorName}</p>
         </CardContent>
       </div>
-      <CardFooter className="flex justify-between items-center p-2 sm:p-4 md:flex-col">
+      <CardFooter className="flex justify-between items-center p-2 sm:p-4 md:flex-row">
         <span className="text-sm sm:text-lg font-bold">R{pricing.toFixed(2)}</span>
         <AddToCart courseId={_id} />
       </CardFooter>

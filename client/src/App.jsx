@@ -1,15 +1,15 @@
 import { Route, Routes } from "react-router-dom"
-import AuthPage from "./pages/auth"
+// import AuthPage from "./pages/auth"
 import RouteGuard from "./components/route-guard"
 import { AuthContext } from "./context/auth-context"
-import InstructorDashboardPage from "./pages/instructor"
-import StudentHomePage from "./pages/student/home"
+// import InstructorDashboardPage from "./pages/instructor"
+// import StudentHomePage from "./pages/student/home"
 import StudentViewCommonLayout from "./components/student-view/common-layout"
-import { useContext } from "react"
+import { useContext, Suspense, lazy } from "react"
 import NotFoundPage from "./pages/not-found"
 import AddNewCoursePage from "./pages/instructor/add-new-course"
 import StudentViewCoursesPage from "./pages/student/courses"
-import StudentCourseDetails from "./pages/student/course-details"
+// import StudentCourseDetails from "./pages/student/course-details"
 import PaymentReturnPage from "./pages/student/payment-return"
 import StudentCoursesPage from "./pages/student/my-courses"
 import StudentViewCourseProgressPage from "./pages/student/course-progress"
@@ -18,12 +18,22 @@ import CartPage from './pages/student/cart'
 import ForgotPassword from './pages/auth/forgot-password'
 import ResetPassword from './pages/auth/reset-password'
 import VerifyEmail from './pages/auth/verify-email';
+import LoadingScreen from './components/loading-screen'
+import TermsOfService from './pages/support/terms-of-service'
+import HelpCenter from './pages/support/help-center';
+import PrivacyPolicy from './pages/support/privacy-policy';
+
+const StudentHomePage = lazy(() => import('./pages/student/home'));
+const AuthPage = lazy(() => import('./pages/auth'));
+const InstructorDashboardPage = lazy(() => import('./pages/instructor'));
+const StudentCourseDetails = lazy(() => import('./pages/student/course-details'));
 
 function App() {
   const { auth } = useContext(AuthContext);
 
   return (
 
+    <Suspense fallback={<LoadingScreen/>}>
     <Routes>
       <Route
         path="/auth"
@@ -74,6 +84,9 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} /> 
         <Route path="/verify-email/:token" element={<VerifyEmail />} />
+        <Route path="/terms-of-service" element={<TermsOfService/>}/>
+        <Route path="/help-center" element={<HelpCenter />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       </Route>
       
       {/* Protected Student Routes */}
@@ -96,6 +109,7 @@ function App() {
       </Route>
       <Route path="*" element={<NotFoundPage/>} />
     </Routes>
+    </Suspense>
   );
 }
 

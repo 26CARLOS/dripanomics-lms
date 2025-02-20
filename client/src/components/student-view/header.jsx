@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 import MobileMenu  from "./mobile-menu"
 import CartIcon from "@/components/cart/cart-icon"
 import AnimatedLogo from "@/components/animated/animated-logo"
+import SearchBar from "./search-bar";
 
 function StudentViewCommonHeader() {
   const navigate = useNavigate()
@@ -26,6 +27,10 @@ function StudentViewCommonHeader() {
           <AnimatedLogo/>
           {auth?.user?.role === 'admin'&&(<Badge>Admin</Badge>)}
         </Link>
+      </div>
+
+      <div className="hidden md:block">
+        <SearchBar />
       </div>
 
       <nav className="hidden md:flex items-center space-x-4">

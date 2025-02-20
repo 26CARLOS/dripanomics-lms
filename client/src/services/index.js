@@ -99,6 +99,11 @@ export async function mediaDeleteService(id) {
 }
 
 //// fetch courses services
+export async function searchCoursesService(query) {
+    const { data } = await axiosInstance.get(`/admin/course/search?query=${query}`);
+    return data;
+}
+
 export async function fetchAllStudentCoursesService(query){
     const { data } = await axiosInstance.get(`/student/course/get?${query}`);
 
@@ -220,7 +225,7 @@ export async function getCurrentCourseProgressService(userId, courseId) {
     return data;
 }
 
-export async function searchCoursesService(query) {
+export async function searchCoursesAdminService(query) {
     const { data } = await axiosInstance.get(`/admin/courses/search?query=${query}`);
     return data;
 }

@@ -17,6 +17,7 @@ import { Hero } from "@/components/student-view/hero";
 import Autoplay from "embla-carousel-autoplay";
 import SaleBanner from "@/components/student-view/sale-banner"
 import BackToTop from "@/components/ui/back-to-top"
+import InfoGraphic from "@/components/student-view/info-graphic"
 
 
 function CategoryTrack({ categories, reverse }) {
@@ -131,6 +132,9 @@ function StudentHomePage() {
             <Hero/>
         </section>
         <SaleBanner/>
+        <section>
+              <InfoGraphic/>
+        </section>
         <section className="bg-gray-100 py-8 px-4 lg:px-8 overflow-hidden">
             <h2 className="text-2xl text-center font-bold mb-6">Categories</h2>
             
@@ -139,7 +143,7 @@ function StudentHomePage() {
             </div>
         </section>
 
-        <section className="py-12 px-4 lg:px-8">
+        <section className="py-12 px-4 lg:px-8 w-full">
             <h2 className="text-2xl font-bold mb-6 text-center">Featured Courses</h2>
             <Carousel
               plugins={[
@@ -151,20 +155,20 @@ function StudentHomePage() {
                 align: "start",
                 loop: true,
               }}
-              className="w-full max-w-6xl mx-auto"
+              className="w-full mx-auto"
             >
             <CarouselContent className="-ml-2 md:-ml-4">
               {coursesList.map((course) => (
-                <CarouselItem key={course._id} className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 lg:basis-1/4">
+                <CarouselItem key={course._id} className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 lg:basis-1/5">
                   <CourseCard {...course} />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="hidden lg:flex">
-              <CarouselPrevious />
-              <CarouselNext />
-            </div>
-          </Carousel>               
+
+          </Carousel>
+          <div className='text-center font-bold mt-4 underline cursor-pointer' onClick={() => navigate('/courses')}>
+          <p >See All</p>           
+          </div>
         </section>
         <BackToTop/>
     </div>  );

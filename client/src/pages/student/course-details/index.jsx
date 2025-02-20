@@ -118,68 +118,9 @@ function SudentCourseDetials () {
       }
 
       const getFreePreviewIndex = studentViewCourseDetials !==null ? 
-        studentViewCourseDetials.curriculum.findIndex((lecture) => lecture.freePreview) : -1;
-    
-      // async function handleCreatePayment() {
-      //   const paymentPayload={
-      //   userId : auth?.user?._id,
-      //   userName : auth?.user?.userName,
-      //   userEmail : auth?.user?.userEmail,
-      //   orderStatus : 'pending',
-      //   paymentMethod : 'paypal',
-      //   paymentStatus : 'initiated',
-      //   orderDate : new Date(),
-      //   paymentId : '',
-      //   payerId : '',
-      //   instructorId : studentViewCourseDetials?.instructorId, 
-      //   instructorName : studentViewCourseDetials?.InstructorName, 
-      //   courseImage : studentViewCourseDetials?.image,
-      //   courseTitle : studentViewCourseDetials?.title,
-      //   courseId : studentViewCourseDetials?._id,
-      //   coursePricing: studentViewCourseDetials?.pricing
-      //   }
-
-      //   console.log('paymentPayload', paymentPayload);
-
-      //   const response = await createPaymentService(paymentPayload);
-      //   console.log('response', response);
-      //   if(response?.success) {
-      //     sessionStorage.setItem('currentOrder_id', JSON.stringify(response?.data?.order_id));
-      //     setAprovalUrl(response?.data?.approveUrl);
-      //     }else{
-
-      //     }
-      // }    
+        studentViewCourseDetials.curriculum.findIndex((lecture) => lecture.freePreview) : -1;  
       
-     
-      async function handleCreatePayment() {
-        const paymentPayload = {
-            userId: auth?.user?._id,
-            userName: auth?.user?.userName,
-            userEmail: auth?.user?.userEmail,
-            courseTitle: studentViewCourseDetials?.title,
-            courseId: studentViewCourseDetials?._id,
-            coursePricing: studentViewCourseDetials?.pricing,
-            instructorId: studentViewCourseDetials?.instructorId,
-            instructorName: studentViewCourseDetials?.InstructorName,
-            courseImage: studentViewCourseDetials?.image,
-        };
     
-        const response = await createPaymentService(paymentPayload);
-    
-        if (response?.success) {
-            // Redirect the user to the PayFast payment page
-            console.log('response', response.data);
-            
-            window.location.href = response.data.payfastUrl;
-        } else {
-            console.error('Error initiating PayFast payment:', response?.message);
-        }
-    }
-
-    async function handleBuyNow(){
-
-    }
       return (
         <>
         <Helmet>
@@ -213,16 +154,16 @@ function SudentCourseDetials () {
       </script>
         <div className="container mx-auto px-4 py-8 flex flex-col gap-8 overflow-hidden">
           <div className="bg-gray-900 text-white p-8 rounded-lg mb-4">
-          <div className='flex items-center gap-4 justify-between sm:flex-col'>
+          <div className='flex items-start gap-4 justify-between '>
             <h1 className="text-3xl font-bold mb-4">
               {studentViewCourseDetials?.title}
             </h1>
-            <Badge className="mb-4 bg-white text-black rounded-full hover:bg-gray-700 cursor-pointer">{studentViewCourseDetials?.category}</Badge>
+            <Badge className="mb-4 bg-white text-black rounded-full hover:bg-gray-700 cursor-pointer hidden md:block">{studentViewCourseDetials?.category}</Badge>
           </div>
 
         <p className="text-xl mb-4">{studentViewCourseDetials?.subtitle}</p>
         <div className="flex items-center space-x-4 mt-2 text-sm">
-          <span>Created By {studentViewCourseDetials?.InstructorName}</span>
+          <span>By {studentViewCourseDetials?.InstructorName}</span>
           <span>Created On {studentViewCourseDetials?.date.split("T")[0]}</span>
         </div>
       </div>
