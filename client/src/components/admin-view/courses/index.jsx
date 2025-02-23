@@ -66,7 +66,7 @@ function AdminCourses({coursesList}) {
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
-                    <Button onClick={() => navigate('/admin/create-new-course')}>
+                    <Button onClick={() => navigate('/admin/create-new-course', {replace:true})}>
                         Create New Course
                     </Button>
                 </div>

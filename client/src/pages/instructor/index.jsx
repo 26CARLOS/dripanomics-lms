@@ -95,7 +95,7 @@ function InstructorDashboardPage () {
                   if (item.value === 'logout') {
                     handleLogout();
                   } else if (item.value === 'home') {
-                    navigate('/home');
+                    navigate('/home', {replace:true});
                   } else {
                     setActiveTab(item.value);
                   }

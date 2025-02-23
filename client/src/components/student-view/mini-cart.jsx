@@ -35,7 +35,7 @@ function MiniCart() {
           </div>
           <Button 
             className="w-full" 
-            onClick={() => navigate('/cart')}
+            onClick={() => navigate('/cart', {replace:true})}
           >
             View Cart
           </Button>

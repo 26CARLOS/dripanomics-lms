@@ -34,7 +34,7 @@ function SaleBanner() {
           <div className="flex-1 text-center sm:text-right mt-4 sm:mt-0">
             <Button
               size="lg"
-              className="bg-white text-primary hover:bg-primary-foreground hover:text-primary-foreground"
+              className="bg-white text-primary hover:bg-primary-foreground transition hover:text-lg duration:3000 ease-in-out"
               onClick ={() => navigate("/courses")}
             >
               Claim Offer Now

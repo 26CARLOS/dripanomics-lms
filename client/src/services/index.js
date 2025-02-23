@@ -110,6 +110,10 @@ export async function fetchAllStudentCoursesService(query){
     return data;
 }
 
+export async function fetchFeaturedCoursesService(){
+    const { data } = await axiosInstance.get('/student/course/get/featured');
+    return data;
+}
 export async function fetchStudentCourseDetailsService(id){
     const { data } = await axiosInstance.get(`/student/course/get/details/${id}`);
 

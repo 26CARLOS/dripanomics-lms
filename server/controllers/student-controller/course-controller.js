@@ -64,6 +64,32 @@ const getAllStudentCourses = async (req, res) => {
     }
   };
 
+const getFeaturedCourses = async (req, res) => {
+  try {
+    const featuredCourses = await Course.find().limit(10);
+    if(featuredCourses){
+      res.status(200).json({
+        success: true,
+        message:"Featured courses retrieved successfully",
+        data: featuredCourses,
+      });
+    }
+    else{
+      res.status(404).json({
+        success: true,
+        message:"No featured courses found",
+        data: null
+      })
+    }
+
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: error.message
+    })
+  }
+};
+
 const getCourseDetails = async (req, res) => {
 
     try {
@@ -127,4 +153,8 @@ const checkCoursePurchaseInfo = async (req, res) => {
   }
 };
 
-module.exports = {getAllStudentCourses, getCourseDetails, checkCoursePurchaseInfo};
+module.exports = {getAllStudentCourses, 
+  getCourseDetails, 
+  checkCoursePurchaseInfo,
+  getFeaturedCourses
+};

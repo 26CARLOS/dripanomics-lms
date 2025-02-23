@@ -59,7 +59,7 @@ function StudentCoursesPage() {
                     :
                     <div>
                         <h1 className='text-3xl font-bold'>Looks empty, get a course now to get started</h1>
-                        <Button onClick={() => navigate('/courses')}>Get a course</Button>
+                        <Button onClick={() => navigate('/courses', {replace:true})}>Get a course</Button>
                     </div>
 
                 }

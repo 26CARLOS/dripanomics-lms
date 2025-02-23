@@ -15,11 +15,11 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    font-size: 5.4em;
+    font-size: 3.843em;
     font-weight: 800;
     text-transform: uppercase;
     will-change: transform, opacity, height;
-    white-space: nowrap;
+    white-space: wrap;
     cursor: pointer;
     line-height: 80px;
   }
@@ -31,3 +31,4 @@
     justify-content: justify-start;
   }
   
+ 

@@ -15,7 +15,7 @@ function StudentViewCommonLayout() {
   return (
     <div className="min-h-screen flex flex-col relative">
       {!shouldHideHeader && <StudentViewCommonHeader />}
-      <div className="flex-1 flex flex-col"> {/* Add padding bottom */}
+      <div className="flex-1 flex flex-col pb-16"> {/* Add padding bottom */}
         <main className="flex-1">
           <Outlet/>
         </main>
@@ -25,5 +25,4 @@ function StudentViewCommonLayout() {
     </div>
   );
 }
-
 export default StudentViewCommonLayout;

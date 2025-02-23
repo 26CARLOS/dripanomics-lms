@@ -1,12 +1,12 @@
 import { Book, BookCopy, Zap, PiggyBank, LibraryBig, Tally4 } from "lucide-react"
-
+import { Link } from "react-router-dom"
 export default function OnlineLearningInfographic() {
   return (
     <div className="bg-[#F8F8F8] p-4 md:p-8 mx-auto font-sans">
       <h1 className="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-8">Dripanomics Bundles</h1>
       <div className="flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap gap-4 md:gap-6">
         {/* Single Module */}
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-md flex-1 min-w-[280px] flex flex-col justify-between">
+        <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm flex-1 min-w-[280px] flex flex-col justify-between hover:shadow-2xl">
           <div>
             <div className="flex items-center justify-between mb-2 md:mb-4">
               <div className="flex items-center">
@@ -20,7 +20,7 @@ export default function OnlineLearningInfographic() {
         </div>
 
         {/* Two Modules */}
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-md flex-1 min-w-[280px] flex flex-col justify-between">
+        <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm flex-1 min-w-[280px] flex flex-col justify-between hover:shadow-2xl">
           <div>
             <div className="flex items-center justify-between mb-2 md:mb-4">
               <div className="flex items-center">
@@ -40,7 +40,7 @@ export default function OnlineLearningInfographic() {
         </div>
 
         {/* Three Modules */}
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-md flex-1 min-w-[280px] flex flex-col justify-between">
+        <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm flex-1 min-w-[280px] flex flex-col justify-between hover:shadow-2xl">
           <div>
             <div className="flex items-center justify-between mb-2 md:mb-4">
               <div className="flex items-center">
@@ -60,7 +60,7 @@ export default function OnlineLearningInfographic() {
         </div>
 
         {/* Four Modules */}
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-md border-2 border-[#50E3C2] flex-1 min-w-[280px] flex flex-col justify-between">
+        <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm border-2 border-[#50E3C2] flex-1 min-w-[280px] flex flex-col justify-between hover:shadow-2xl">
           <div>
             <div className="flex items-center justify-between mb-2 md:mb-4">
               <div className="flex items-center">
@@ -82,10 +82,12 @@ export default function OnlineLearningInfographic() {
 
       {/* Call to Action */}
       <div className="mt-8 text-center">
+        <Link to="/courses">
         <button className="bg-gray-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-700 transition-colors duration-300 flex items-center justify-center mx-auto">
           <Zap className="w-5 h-5 mr-2" />
           Start Learning Now
         </button>
+        </Link>
       </div>
     </div>
   )

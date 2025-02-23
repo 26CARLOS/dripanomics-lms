@@ -13,7 +13,7 @@ function VerifyEmail() {
                 const response = await verifyEmailService(token);
                 if (response.success) {
                     setStatus('Email verified successfully! Redirecting to login...');
-                    setTimeout(() => navigate('/auth'), 3000);
+                    setTimeout(() => navigate('/auth', {replace:true}), 3000);
                 }
             } catch (error) {
                 setStatus('Verification failed. Please try again.');

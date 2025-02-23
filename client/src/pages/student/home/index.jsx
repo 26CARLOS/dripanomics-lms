@@ -4,7 +4,7 @@ import banner from "/banner.jpeg"
 import { courseCategories } from "@/config";
 import { StudentContext } from "@/context/student-context";
 import { useContext, useEffect } from "react";
-import { fetchAllStudentCoursesService, getCartService, checkCoursePurchaseInfoService } from "@/services";
+import { fetchFeaturedCoursesService, getCartService, checkCoursePurchaseInfoService } from "@/services";
 import { useNavigate } from "react-router-dom";
 import Flip from "@/components/animated/flip";
 import { useSpring, animated } from '@react-spring/web';
@@ -76,8 +76,8 @@ function StudentHomePage() {
     const{auth} = useContext(AuthContext);
     const navigate = useNavigate()
 
-    async function fetchAllStudentCourses(){
-        const courses = await fetchAllStudentCoursesService();
+    async function fetchFeaturedCourses(){
+        const courses = await fetchFeaturedCoursesService();
         console.log(courses);
         if(courses?.success){
             setCoursesList(courses.data)
@@ -93,9 +93,9 @@ function StudentHomePage() {
         
             if (response?.success) {
               if (response?.data) {
-               return navigate(`/course-progress/${getCurrentCourseId}`);
+               return navigate(`/course-progress/${getCurrentCourseId}`, {replace:true});
               } else {
-                return navigate(`/course/details/${getCurrentCourseId}`);
+                return navigate(`/course/details/${getCurrentCourseId}`, {replace:true});
               }
             }
           }
@@ -108,7 +108,7 @@ function StudentHomePage() {
     }
 
     useEffect(() => {
-        fetchAllStudentCourses();
+        fetchFeaturedCourses();
     },[])
 
     useEffect(() => {
@@ -166,7 +166,7 @@ function StudentHomePage() {
             </CarouselContent>
 
           </Carousel>
-          <div className='text-center font-bold mt-4 underline cursor-pointer' onClick={() => navigate('/courses')}>
+          <div className='text-center font-bold mt-4 underline cursor-pointer' onClick={() => navigate('/courses', {replace: true})}>
           <p >See All</p>           
           </div>
         </section>

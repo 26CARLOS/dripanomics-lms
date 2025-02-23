@@ -38,14 +38,17 @@ export default function Flip() {
   }, [])
 
   return (
-    <div className={styles.container}>
-      <div className={styles.main}>
-        {transitions(({ innerHeight, ...rest }, item) => (
-          <animated.div className={styles.transitionsItem} style={rest} onClick={reset}>
-            <animated.div style={{ overflow: 'hidden', height: innerHeight }}>{item}</animated.div>
-          </animated.div>
-        ))}
+    <div className='md:text-2xl'>
+      <div className={styles.container}>
+        <div className={styles.main}>
+          {transitions(({ innerHeight, ...rest }, item) => (
+            <animated.div className={`${styles.transitionsItem}`} style={rest} onClick={reset}>
+              <animated.div style={{ overflow: 'hidden', height: innerHeight }}>{item}</animated.div>
+            </animated.div>
+          ))}
+        </div>
       </div>
     </div>
+
   )
 }

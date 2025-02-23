@@ -35,7 +35,7 @@ function ResetPassword() {
                     title: "Success",
                     description: "Password has been reset successfully",
                 });
-                navigate('/auth');
+                navigate('/auth', {replace:true});
             }
         } catch (error) {
             toast({
