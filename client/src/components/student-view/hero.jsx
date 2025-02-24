@@ -21,10 +21,10 @@ export function Hero() {
       </div>
       <div className="relative mx-auto max-w-7xl py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
         <Flip/>
-        <div className="mt-10 flex items-center md:justify-center gap-x-6">
+        <div className="mt-10 flex items-center justify-center gap-x-6">
           <Button size="lg" 
           className="bg-white text-primary hover:bg-primary-foreground"
-          onClick={() => navigate("/courses")}
+          onClick={() => navigate("/courses", {replace:true})}
           >
             Explore Courses
             <ArrowRight className="ml-2 h-5 w-5" />

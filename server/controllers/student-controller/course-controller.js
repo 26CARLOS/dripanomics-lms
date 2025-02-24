@@ -66,7 +66,12 @@ const getAllStudentCourses = async (req, res) => {
 
 const getFeaturedCourses = async (req, res) => {
   try {
-    const featuredCourses = await Course.find().limit(10);
+    const featuredCourses = await Course.aggregate([
+      { $addFields : { studentCount : {$size : "$students"}}},
+      { $sort: { studentCount : -1}},
+      { $limit: 10},
+      { $project: {studentCount: 0}}
+    ]);
     if(featuredCourses){
       res.status(200).json({
         success: true,

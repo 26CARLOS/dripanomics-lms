@@ -20,55 +20,55 @@ import BackToTop from "@/components/ui/back-to-top"
 import InfoGraphic from "@/components/student-view/info-graphic"
 
 
-function CategoryTrack({ categories, reverse }) {
-    const containerRef = useRef(null);
+// function CategoryTrack({ categories, reverse }) {
+//     const containerRef = useRef(null);
   
-    const [springs, api] = useSpring(() => ({
-      from: { x: 0 },
-      to: async (next) => {
-        while (true) {
-          await next({ 
-            x: reverse ? 100 : -100,
-            reset: true,
-            from: { x: 0 },
-            config: { 
-              duration: 20000,
-              easing: t => t 
-            }
-          });
-        }
-      },
-      config: { 
-        duration: 20000,
-        easing: t => t
-      },
-    }));
+//     const [springs, api] = useSpring(() => ({
+//       from: { x: 0 },
+//       to: async (next) => {
+//         while (true) {
+//           await next({ 
+//             x: reverse ? 100 : -100,
+//             reset: true,
+//             from: { x: 0 },
+//             config: { 
+//               duration: 20000,
+//               easing: t => t 
+//             }
+//           });
+//         }
+//       },
+//       config: { 
+//         duration: 20000,
+//         easing: t => t
+//       },
+//     }));
   
-    return (
-      <div className="relative overflow-hidden">
-        <animated.div
-          ref={containerRef}
-          style={{
-            transform: springs.x.to(x => `translateX(${x}%)`),
-          }}
-          className="flex whitespace-nowrap"
-          onMouseEnter={() => api.pause()}
-          onMouseLeave={() => api.resume()}
-        >
-          {[...categories, ...categories, ...categories].map((category, idx) => (
+//     return (
+//       <div className="relative overflow-hidden">
+//         <animated.div
+//           ref={containerRef}
+//           style={{
+//             transform: springs.x.to(x => `translateX(${x}%)`),
+//           }}
+//           className="flex whitespace-nowrap"
+//           onMouseEnter={() => api.pause()}
+//           onMouseLeave={() => api.resume()}
+//         >
+//           {[...categories, ...categories, ...categories].map((category, idx) => (
             
-            <Button
-              className="mx-4 flex-shrink-0"
-              key={`${category.id}-${idx}`}
-              variant="outline"
-            >
-              {category.label}
-            </Button>
-          ))}
-        </animated.div>
-      </div>
-    );
-  }
+//             <Button
+//               className="mx-4 flex-shrink-0"
+//               key={`${category.id}-${idx}`}
+//               variant="outline"
+//             >
+//               {category.label}
+//             </Button>
+//           ))}
+//         </animated.div>
+//       </div>
+//     );
+//   }
 
 function StudentHomePage() {
 
@@ -135,13 +135,13 @@ function StudentHomePage() {
         <section>
               <InfoGraphic/>
         </section>
-        <section className="bg-gray-100 py-8 px-4 lg:px-8 overflow-hidden">
+        {/* <section className="bg-gray-100 py-8 px-4 lg:px-8 overflow-hidden">
             <h2 className="text-2xl text-center font-bold mb-6">Categories</h2>
             
             <div className="relative overflow-hidden py-4">
                 <CategoryTrack categories={[...courseCategories, ...courseCategories]} reverse={false} />
             </div>
-        </section>
+        </section> */}
 
         <section className="py-12 px-4 lg:px-8 w-full">
             <h2 className="text-2xl font-bold mb-6 text-center">Featured Courses</h2>
