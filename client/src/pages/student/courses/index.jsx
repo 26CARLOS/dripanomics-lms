@@ -34,7 +34,16 @@ function StudentViewCoursesPage(){
 
     const [sort, setSort ] = useState('price-lowtohigh');
     const [filters, setFilters] = useState({});
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        totalPages: 1,
+        totalCourses: 0,
+        hasMore: true
+    });
+
     const [searchParams, setSearchParams] = useSearchParams({});
+
     const {coursesList, setCoursesList, loading, setLoading} = useContext(StudentContext);
     const {auth} = useContext(AuthContext);
     const navigate = useNavigate();
@@ -66,18 +75,28 @@ function StudentViewCoursesPage(){
         sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
       }
 
-      async function fetchAllStudentCourses(filters, sort) {
+      async function fetchAllStudentCourses(filters, sort, page) {
         const query = new URLSearchParams({
-          ...filters,
-          sortBy: sort,
+            ...filters,
+            sortBy: sort,
+            page,
+            limit: 8
         });
+        
         const response = await fetchAllStudentCoursesService(query);
         if (response?.success) {
-          setCoursesList(response?.data);
-          setLoading(false);
+            setCoursesList(response?.data);
+            setPagination(response.pagination);
+            console.log(response)
+            setLoading(false);
         }
-      }
+    }
     
+    function handlePageChange(newPage) {
+      setCurrentPage(newPage);
+      fetchAllStudentCourses(filters, sort, newPage);
+  }
+
       async function handleCourseNavigate(getCurrentCourseId) {
         const response = await checkCoursePurchaseInfoService(
           getCurrentCourseId,
@@ -105,10 +124,11 @@ function StudentViewCoursesPage(){
         setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
       }, []);
 
-    useEffect(() => {
-        if(filters!== null && sort !== null){
-        fetchAllStudentCourses(filters, sort);}
-    },[filters, sort])
+      useEffect(() => {
+        if (filters !== null && sort !== null) {
+          fetchAllStudentCourses(filters, sort, currentPage);
+        }
+      }, [filters, sort, currentPage]);
 
     useEffect(() => {
         return () => {
@@ -181,41 +201,6 @@ function StudentViewCoursesPage(){
                 
                     {coursesList && coursesList.length > 0 ? (
               coursesList.map((courseItem) => (
-                // <Card
-                //   onClick={()=>handleCourseNavigate(courseItem?._id)}
-                //   className="cursor-pointer"
-                //   key={courseItem?._id}
-                // >
-                //   <CardContent className="flex gap-4 p-4">
-                //     <div className="w-48 h-32 flex-shrink-0">
-                //       <img
-                //         src={courseItem?.image}
-                //         className="w-ful h-full object-cover"
-                //       />
-                //     </div>
-                //     <div className="flex-1 overflow-hidden">
-                //       <CardTitle className=" sm:text-xs text-md mb-2 line-clamp-2 h-14 overflow-hidden">
-                //         {courseItem?.title}
-                //       </CardTitle>
-                //       <p className="text-sm text-gray-600 mb-1">
-                //         By{" "}
-                //         <span className="font-bold line-clamp-2">
-                //           {courseItem?.InstructorName}
-                //         </span>
-                //       </p>
-                //       <p className="text-[16px] text-gray-600 mt-3 mb-2">
-                //         {`${courseItem?.curriculum?.length} ${
-                //           courseItem?.curriculum?.length <= 1
-                //             ? "Lecture"
-                //             : "Lectures"
-                //         } - ${courseItem?.level.toUpperCase()} Level`}
-                //       </p>
-                //       <p className="font-bold text-lg">
-                //         R{courseItem?.pricing.toFixed(2)}
-                //       </p>
-                //     </div>
-                //   </CardContent>
-                // </Card>
                 <CourseCard {...courseItem} key={courseItem._id}/>
               ))
             ) : loading ?(<Skeleton/>)
@@ -225,6 +210,45 @@ function StudentViewCoursesPage(){
                     </div>
                 </main>
              </div>
+             <div className="flex flex-wrap justify-center items-center gap-2 mt-8">
+              <Button 
+                  variant="outline"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="w-24 sm:w-auto"
+              >
+                  Previous
+              </Button>
+              
+              {/* Show limited page numbers on mobile */}
+              <div className="hidden sm:flex gap-2">
+                  {Array.from({ length: pagination.totalPages }, (_, i) => (
+                      <Button
+                          key={i + 1}
+                          variant={currentPage === i + 1 ? "default" : "outline"}
+                          onClick={() => handlePageChange(i + 1)}
+                      >
+                          {i + 1}
+                      </Button>
+                  ))}
+              </div>
+
+              {/* Show current page indicator on mobile */}
+              <div className="sm:hidden flex items-center gap-2">
+                  <span className="text-sm">
+                      Page {currentPage} of {pagination.totalPages}
+                  </span>
+              </div>
+              
+              <Button 
+                  variant="outline"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={!pagination.hasMore}
+                  className="w-24 sm:w-auto"
+              >
+                  Next
+              </Button>
+          </div>
              <BackToTop/>
         </div>
     )
