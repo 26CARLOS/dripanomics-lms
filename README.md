@@ -1,4 +1,4 @@
-# Online Learning Platform
+# Dripanomics Grail Online Learning Platform
 
 A full-stack MERN application for creating and managing online courses. Built with React, Express, MongoDB, and Node.js.
 
@@ -24,3 +24,5 @@ A full-stack MERN application for creating and managing online courses. Built wi
 - Express.js
 - MongoDB
 - Cloudinary for media storage
+
+app.dripanomicstutorials.com
